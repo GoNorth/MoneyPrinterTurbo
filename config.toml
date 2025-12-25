@@ -1,7 +1,7 @@
 [app]
 video_source = "pexels"
 hide_config = false
-pexels_api_keys = [ "sk-020aa55522e0408ca177a00932ba6ef3", "sk-675b99107a3d47f9a3c30eb6b3d3c6d4",]
+pexels_api_keys = [ "FB6EEYkzNFdtpYIAOVVMOqImijLkdWw1pW3XAFG9xgrnwhs5EZkEomeW",]
 pixabay_api_keys = []
 llm_provider = "qwen"
 pollinations_api_key = ""
