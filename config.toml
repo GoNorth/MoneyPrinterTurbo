@@ -35,6 +35,7 @@ modelscope_base_url = "https://api-inference.modelscope.cn/v1/"
 modelscope_model_name = "Qwen/Qwen3-32B"
 subtitle_provider = "edge"
 imagemagick_path = "D:\\Program Files\\ImageMagick-7.1.2-Q16\\magick.exe"
+ffmpeg_path = "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\resource\\ffmpeg.exe"
 endpoint = ""
 material_directory = ""
 enable_redis = false
