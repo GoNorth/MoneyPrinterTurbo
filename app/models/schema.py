@@ -31,6 +31,7 @@ class VideoAspect(str, Enum):
     landscape = "16:9"
     portrait = "9:16"
     square = "1:1"
+    original = "original"
 
     def to_resolution(self):
         if self == VideoAspect.landscape.value:
@@ -39,6 +40,8 @@ class VideoAspect(str, Enum):
             return 1080, 1920
         elif self == VideoAspect.square.value:
             return 1080, 1080
+        elif self == VideoAspect.original.value:
+            return None, None  # 返回None表示使用原始分辨率
         return 1080, 1920
 
 

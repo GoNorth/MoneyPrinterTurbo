@@ -158,6 +158,17 @@ def combine_videos(
     # random subclipped_items order
     if video_concat_mode.value == VideoConcatMode.random.value:
         random.shuffle(subclipped_items)
+    
+    # If using original aspect ratio, use the first clip's resolution as target
+    if video_width is None or video_height is None:
+        if subclipped_items:
+            video_width = subclipped_items[0].width
+            video_height = subclipped_items[0].height
+            logger.info(f"using original aspect ratio: {video_width}x{video_height} (from first clip)")
+        else:
+            # Fallback to portrait if no clips available
+            video_width, video_height = 1080, 1920
+            logger.warning("no clips available, using default resolution 1080x1920")
         
     logger.debug(f"total subclipped items: {len(subclipped_items)}")
     
@@ -369,6 +380,13 @@ def generate_video(
 ):
     aspect = VideoAspect(params.video_aspect)
     video_width, video_height = aspect.to_resolution()
+    
+    # If using original aspect ratio, get resolution from the input video
+    if video_width is None or video_height is None:
+        input_clip = VideoFileClip(video_path)
+        video_width, video_height = input_clip.size
+        close_clip(input_clip)
+        logger.info(f"using original aspect ratio: {video_width} x {video_height} (from input video)")
 
     logger.info(f"generating video: {video_width} x {video_height}")
     logger.info(f"  ① video: {video_path}")

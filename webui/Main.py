@@ -621,6 +621,7 @@ with middle_panel:
         video_aspect_ratios = [
             (tr("Portrait"), VideoAspect.portrait.value),
             (tr("Landscape"), VideoAspect.landscape.value),
+            (tr("Original"), VideoAspect.original.value),
         ]
         selected_index = st.selectbox(
             tr("Video Ratio"),
