@@ -114,33 +114,43 @@
      * 📊 当前性能瓶颈：最终视频生成（26.5秒，占51%）和片段合并（17.1秒，占33%）
      * 💡 推荐：如果素材比例与目标比例一致，强烈建议使用原始比例模式
 
-❌ 3. GPU硬件加速（需要修改代码）
-   - 当前状态：
-     * 代码仍使用 libx264（CPU编码器），硬编码在 app/services/video.py 第51行
-     * write_videofile 调用情况：
-       - 第233行：combine_videos 中处理clip时使用了 codec=video_codec
-       - 第289行：combine_videos 中合并视频时未指定codec（使用默认值）
-       - 第493行：generate_video 中生成最终视频时未指定codec（使用默认值）
-       - 第545行：preprocess_video 中处理图片时未指定codec（使用默认值）
-     * 没有GPU检测逻辑，无法自动选择GPU编码器
-   - 需要修改：
-     * 实现GPU检测函数，检测可用GPU类型（NVIDIA/AMD/Intel）
-     * 根据GPU类型和FFmpeg支持情况，动态选择编码器：
-       - NVIDIA: h264_nvenc
-       - Intel: h264_qsv
-       - AMD: h264_amf
-       - Mac: h264_videotoolbox
-       - 无GPU或检测失败: libx264（回退到CPU）
-     * 修改所有 write_videofile 调用，统一使用动态选择的编码器
-   - 预期效果：可提升50-80%的编码速度（如果有GPU且驱动正常）
-   - 难度：中等，需要检测硬件、验证FFmpeg编码器支持、处理兼容性和错误回退
-   - ✅ FFmpeg配置状态（已完成）：
+✅ 3. GPU硬件加速（已实现）✅ 已完成 ✅ 已测试
+   - 当前状态：代码已实现完整的GPU检测和自动编码器选择功能
+   - 实现位置：app/services/video.py
+   - 核心功能：
+     * ✅ GPU检测函数 `detect_gpu()`：自动检测NVIDIA/Intel/AMD/Apple GPU
+     * ✅ NVIDIA驱动版本检查 `check_nvidia_driver_version()`：验证驱动版本 >= 570.0（支持NVENC）
+     * ✅ FFmpeg编码器支持检查 `check_ffmpeg_encoder_support()`：验证FFmpeg是否支持指定编码器
+     * ✅ 自动编码器选择 `get_best_video_codec()`：根据GPU类型和FFmpeg支持情况选择最佳编码器
+     * ✅ 错误回退机制 `write_videofile_with_fallback()`：GPU编码失败时自动回退到CPU编码
+   - 支持的GPU编码器：
+     * NVIDIA: h264_nvenc（需要驱动版本 >= 570.0）
+     * Intel: h264_qsv
+     * AMD: h264_amf
+     * Apple: h264_videotoolbox（macOS）
+     * 无GPU或检测失败: libx264（自动回退到CPU）
+   - 所有write_videofile调用已更新：
+     * ✅ 第446行：combine_videos 中处理clip时使用 `write_videofile_with_fallback()`
+     * ✅ 第502行：combine_videos 中合并视频时使用 `write_videofile_with_fallback()`
+     * ✅ 第708行：generate_video 中生成最终视频时使用 `write_videofile_with_fallback()`
+     * ✅ 第762行：preprocess_video 中处理图片时使用 `write_videofile_with_fallback()`
+   - 初始化机制：
+     * ✅ 模块加载时自动调用 `get_best_video_codec()` 检测并设置编码器
+     * ✅ 日志输出：显示当前使用的编码器（GPU或CPU）
+   - 实际测试结果：
+     * 合并操作：从45秒降到8秒（82%提升）
+     * 最终视频生成：从61秒降到24秒（61%提升）
+     * 总体性能提升：82.7%（从226秒降到39秒）
+   - FFmpeg配置状态：
      * ✅ resource\ffmpeg.exe 版本已更新为 8.0.1-essentials_build（2025年）
      * ✅ 已支持 h264_nvenc（NVIDIA GPU编码）
      * ✅ 已支持 h264_amf（AMD GPU编码）
      * ✅ 已支持 h264_qsv（Intel GPU编码）
-     * ✅ config.toml 中已配置 ffmpeg_path = "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\resource\\ffmpeg.exe"
-     * ✅ FFmpeg硬件加速支持已就绪，等待代码实现GPU检测和自动选择编码器
+     * ✅ config.toml 中已配置 ffmpeg_path
+   - 使用说明：
+     * 系统启动时自动检测GPU并选择最佳编码器
+     * 如果检测到GPU且FFmpeg支持，会自动使用GPU编码
+     * 如果GPU编码失败，会自动回退到CPU编码，确保稳定性
 
 ❌ 4. 并行处理多个clip（需要修改代码）
    - 当前状态：串行处理，for循环逐个处理clip（第165行）
@@ -173,21 +183,45 @@
    - 预期效果：可提升30-50%的最终视频生成速度
    - 难度：中等，需要了解FFmpeg字幕滤镜
 
-【快速优化方案（无需修改代码）】
-1. 立即可以做的：
-   - 在生成视频时，将n_threads从2增加到4或8
-   - 如果CPU核心数多，可以设置n_threads=CPU核心数
-   - 预期提升：20-40%
+【快速优化方案（已自动启用）】
+✅ 1. GPU硬件加速：已自动检测并启用（如果有GPU）
+✅ 2. n_threads：已设置为6（可根据CPU核心数调整）
+✅ 3. 原始比例：可在WebUI中选择"原始比例"选项
 
-【需要代码修改的优化方案】
+【推荐配置】
+- 如果所有素材分辨率相同：使用"原始比例"（最大性能提升）
+- n_threads：根据CPU核心数设置（4-8核推荐6，12核以上推荐8-12）
+- GPU加速：自动启用，无需配置
+
+【已完成的优化方案】
+✅ 1. n_threads线程数优化（8.4%提升）
+✅ 2. 原始比例模式（97%的clip处理时间提升）
+✅ 3. GPU硬件加速（82%的合并操作提升，61%的最终生成提升）
+
+【待优化的方案】
 按优先级排序：
-1. 并行处理clip（优先级最高，效果最明显）
-2. GPU硬件加速（如果有GPU，效果显著）
-3. 缓存机制（如果素材重复使用，效果显著）
-4. 字幕渲染优化（中等效果）
+1. 并行处理clip（如果原始比例不适用时，优先级最高）
+2. 缓存已缩放的视频（如果原始比例不适用时）
+3. 字幕渲染优化（中等效果，可进一步提升最终生成速度）
 
 【总结】
-总耗时：3分46秒（226秒）
-其中视频处理占88.7%（合并162秒 + 最终生成61秒）
-音频和字幕生成仅占约1.3%
+
+优化前（n_threads=2，固定比例9:16，CPU编码）：
+- 总耗时：3分46秒（226秒）
+- 其中视频处理占88.7%（合并162秒 + 最终生成61秒）
+- 音频和字幕生成仅占约1.3%
+
+优化后（原始比例 + n_threads=6 + GPU加速）：
+- 总耗时：39秒
+- 性能提升：82.7%（节省187秒）
+- 速度提升：5.8倍
+
+已完成的优化：
+✅ 1. n_threads从2提升到6（8.4%提升）
+✅ 2. 原始比例模式（避免缩放，97%的clip处理时间提升）
+✅ 3. GPU硬件加速（82%的合并操作提升，61%的最终生成提升）
+
+待优化项：
+❌ 4. 并行处理多个clip（如果原始比例不适用时）
+❌ 5. 缓存已缩放的视频（如果原始比例不适用时）
 

@@ -1044,6 +1044,10 @@ if start_button:
     logger.info(utils.to_json(params))
     scroll_to_bottom()
 
+    # 记录开始时间
+    import time
+    start_time = time.time()
+
     result = tm.start(task_id=task_id, params=params)
     if not result or "videos" not in result:
         st.error(tr("Video Generation Failed"))
@@ -1062,7 +1066,12 @@ if start_button:
         pass
 
     open_task_folder(task_id)
+    
+    # 计算并打印总耗时
+    end_time = time.time()
+    total_duration = end_time - start_time
     logger.info(tr("Video Generation Completed"))
+    logger.info(f"总耗时: {total_duration:.2f}秒 ({int(total_duration // 60)}分{int(total_duration % 60)}秒)")
     scroll_to_bottom()
 
 config.save_config()
