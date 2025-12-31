@@ -4,7 +4,9 @@ import os
 import random
 import gc
 import shutil
-from typing import List
+import subprocess
+import platform
+from typing import List, Optional, Tuple
 from loguru import logger
 from moviepy import (
     AudioFileClip,
@@ -48,8 +50,219 @@ class SubClippedVideoClip:
 
 
 audio_codec = "aac"
-video_codec = "libx264"
+video_codec = "libx264"  # 默认CPU编码器，会在初始化时根据GPU检测结果更新
 fps = 30
+
+# GPU编码器映射
+GPU_ENCODERS = {
+    "nvidia": "h264_nvenc",
+    "intel": "h264_qsv",
+    "amd": "h264_amf",
+    "apple": "h264_videotoolbox",  # macOS
+}
+
+def check_nvidia_driver_version() -> bool:
+    """
+    检查NVIDIA驱动版本是否支持NVENC
+    需要驱动版本 >= 570.0 (NVENC API 13.0)
+    返回: True if supported, False otherwise
+    """
+    try:
+        result = subprocess.run(
+            ["nvidia-smi", "--query-gpu=driver_version", "--format=csv,noheader"],
+            capture_output=True,
+            text=True,
+            timeout=2,
+            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            driver_version_str = result.stdout.strip().split(chr(10))[0]
+            try:
+                # 提取主版本号（例如 "570.61" -> 570）
+                major_version = int(driver_version_str.split('.')[0])
+                if major_version >= 570:
+                    logger.debug(f"NVIDIA驱动版本: {driver_version_str} (支持NVENC)")
+                    return True
+                else:
+                    logger.warning(f"NVIDIA驱动版本: {driver_version_str} (需要 >= 570.0 才能使用NVENC)")
+                    return False
+            except (ValueError, IndexError):
+                logger.debug(f"无法解析NVIDIA驱动版本: {driver_version_str}")
+                return False
+    except Exception as e:
+        logger.debug(f"检查NVIDIA驱动版本失败: {str(e)}")
+    
+    return False
+
+def detect_gpu() -> Optional[str]:
+    """
+    检测可用的GPU类型
+    返回: "nvidia", "intel", "amd", "apple" 或 None
+    """
+    try:
+        system = platform.system().lower()
+        
+        # 检测NVIDIA GPU
+        try:
+            result = subprocess.run(
+                ["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"],
+                capture_output=True,
+                text=True,
+                timeout=2,
+                creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                gpu_name = result.stdout.strip().split(chr(10))[0]
+                logger.info(f"检测到NVIDIA GPU: {gpu_name}")
+                # 检查驱动版本是否支持NVENC
+                if check_nvidia_driver_version():
+                    return "nvidia"
+                else:
+                    logger.warning("NVIDIA驱动版本过旧，无法使用NVENC硬件加速")
+                    return None
+        except (FileNotFoundError, subprocess.TimeoutExpired):
+            pass
+        
+        # Windows系统检测Intel/AMD GPU
+        if system == "windows":
+            try:
+                # 检测Intel GPU
+                result = subprocess.run(
+                    ["wmic", "path", "win32_VideoController", "get", "name"],
+                    capture_output=True,
+                    text=True,
+                    timeout=2,
+                    creationflags=subprocess.CREATE_NO_WINDOW
+                )
+                if result.returncode == 0:
+                    output = result.stdout.lower()
+                    if "intel" in output and ("uhd" in output or "iris" in output or "xe" in output):
+                        logger.info("检测到Intel GPU")
+                        return "intel"
+                    if "amd" in output or "radeon" in output:
+                        logger.info("检测到AMD GPU")
+                        return "amd"
+            except (FileNotFoundError, subprocess.TimeoutExpired):
+                pass
+        
+        # macOS检测Apple Silicon
+        if system == "darwin":
+            try:
+                result = subprocess.run(
+                    ["system_profiler", "SPDisplaysDataType"],
+                    capture_output=True,
+                    text=True,
+                    timeout=2
+                )
+                if result.returncode == 0 and "Apple" in result.stdout:
+                    logger.info("检测到Apple GPU")
+                    return "apple"
+            except (FileNotFoundError, subprocess.TimeoutExpired):
+                pass
+        
+        # Linux检测（可选）
+        if system == "linux":
+            try:
+                # 检测Intel
+                if os.path.exists("/sys/class/drm/card0/device/vendor"):
+                    with open("/sys/class/drm/card0/device/vendor", "r") as f:
+                        vendor_id = f.read().strip()
+                        if vendor_id == "0x8086":  # Intel
+                            logger.info("检测到Intel GPU")
+                            return "intel"
+                        elif vendor_id == "0x1002":  # AMD
+                            logger.info("检测到AMD GPU")
+                            return "amd"
+            except Exception:
+                pass
+        
+    except Exception as e:
+        logger.debug(f"GPU检测失败: {str(e)}")
+    
+    return None
+
+def check_ffmpeg_encoder_support(encoder_name: str) -> bool:
+    """
+    检查FFmpeg是否支持指定的编码器
+    """
+    try:
+        # 获取FFmpeg路径
+        ffmpeg_exe = os.environ.get("IMAGEIO_FFMPEG_EXE", "ffmpeg")
+        if not os.path.isfile(ffmpeg_exe):
+            ffmpeg_exe = "ffmpeg"
+        
+        result = subprocess.run(
+            [ffmpeg_exe, "-encoders"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
+        )
+        
+        if result.returncode == 0:
+            return encoder_name in result.stdout
+    except Exception as e:
+        logger.debug(f"检查FFmpeg编码器支持失败: {str(e)}")
+    
+    return False
+
+def get_best_video_codec() -> Tuple[str, str]:
+    """
+    自动选择最佳的视频编码器
+    返回: (编码器名称, 描述信息)
+    """
+    gpu_type = detect_gpu()
+    
+    if gpu_type and gpu_type in GPU_ENCODERS:
+        encoder = GPU_ENCODERS[gpu_type]
+        if check_ffmpeg_encoder_support(encoder):
+            gpu_names = {
+                "nvidia": "NVIDIA GPU",
+                "intel": "Intel GPU",
+                "amd": "AMD GPU",
+                "apple": "Apple GPU"
+            }
+            logger.info(f"✅ 使用GPU硬件加速: {encoder} ({gpu_names[gpu_type]})")
+            return encoder, f"{encoder} ({gpu_names[gpu_type]})"
+        else:
+            logger.warning(f"⚠️ 检测到{gpu_type.upper()} GPU，但FFmpeg不支持{encoder}，回退到CPU编码")
+    
+    logger.info("ℹ️ 使用CPU编码: libx264")
+    return "libx264", "libx264 (CPU)"
+
+def write_videofile_with_fallback(clip, filename, codec=None, fallback_codec="libx264", **kwargs):
+    """
+    带错误回退的write_videofile包装函数
+    如果GPU编码失败，自动回退到CPU编码
+    """
+    if codec is None:
+        codec = video_codec
+    
+    # 如果是GPU编码器，尝试使用，失败则回退
+    if codec != fallback_codec and codec in GPU_ENCODERS.values():
+        try:
+            clip.write_videofile(filename, codec=codec, **kwargs)
+            return
+        except Exception as e:
+            error_msg = str(e).lower()
+            # 检查是否是驱动版本或编码器相关的错误
+            if any(keyword in error_msg for keyword in ["nvenc", "driver", "encoder", "not support", "invalid argument"]):
+                logger.warning(f"⚠️ GPU编码器 {codec} 失败: {str(e)[:200]}")
+                logger.info(f"🔄 自动回退到CPU编码: {fallback_codec}")
+                # 回退到CPU编码
+                clip.write_videofile(filename, codec=fallback_codec, **kwargs)
+                return
+            else:
+                # 其他错误，直接抛出
+                raise
+    
+    # 直接使用指定编码器（通常是CPU编码）
+    clip.write_videofile(filename, codec=codec, **kwargs)
+
+# 初始化时自动检测并设置最佳编码器
+_video_codec, _video_codec_desc = get_best_video_codec()
+video_codec = _video_codec
+logger.info(f"视频编码器已设置为: {_video_codec_desc}")
 
 def close_clip(clip):
     if clip is None:
@@ -230,7 +443,7 @@ def combine_videos(
                 
             # wirte clip to temp file
             clip_file = f"{output_dir}/temp-clip-{i+1}.mp4"
-            clip.write_videofile(clip_file, logger=None, fps=fps, codec=video_codec)
+            write_videofile_with_fallback(clip, clip_file, codec=video_codec, logger=None, fps=fps)
             
             close_clip(clip)
         
@@ -286,8 +499,10 @@ def combine_videos(
             merged_clip = concatenate_videoclips([base_clip, next_clip])
 
             # save merged result to temp file
-            merged_clip.write_videofile(
+            write_videofile_with_fallback(
+                merged_clip,
                 filename=temp_merged_next,
+                codec=video_codec,
                 threads=threads,
                 logger=None,
                 temp_audiofile_path=output_dir,
@@ -490,8 +705,10 @@ def generate_video(
             logger.error(f"failed to add bgm: {str(e)}")
 
     video_clip = video_clip.with_audio(audio_clip)
-    video_clip.write_videofile(
+    write_videofile_with_fallback(
+        video_clip,
         output_file,
+        codec=video_codec,
         audio_codec=audio_codec,
         temp_audiofile_path=output_dir,
         threads=params.n_threads or 2,
@@ -542,7 +759,7 @@ def preprocess_video(materials: List[MaterialInfo], clip_duration=4):
 
             # Output the video to a file.
             video_file = f"{material.url}.mp4"
-            final_clip.write_videofile(video_file, fps=30, logger=None)
+            write_videofile_with_fallback(final_clip, video_file, codec=video_codec, fps=30, logger=None)
             close_clip(clip)
             material.url = video_file
             logger.success(f"image processed: {video_file}")
