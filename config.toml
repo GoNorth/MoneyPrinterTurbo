@@ -66,4 +66,4 @@ tts_server = "azure-tts-v1"
 voice_name = "zh-CN-XiaoxiaoNeural-Female"
 font_name = "MicrosoftYaHeiBold.ttc"
 text_fore_color = "#FFFFFF"
-font_size = 60
+font_size = 56
