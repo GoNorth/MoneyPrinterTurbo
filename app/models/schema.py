@@ -102,7 +102,7 @@ class VideoParams(BaseModel):
     font_size: int = 60
     stroke_color: Optional[str] = "#000000"
     stroke_width: float = 1.5
-    n_threads: Optional[int] = 2
+    n_threads: Optional[int] = 6
     paragraph_number: Optional[int] = 1
 
 

@@ -1,0 +1,172 @@
+2025-12-31 10:37:24.962 | INFO     | __main__:<module>:1042 - 开始生成视频
+
+2025-12-31 10:37:24.963 | INFO     | __main__:<module>:1043 - {
+    "video_subject": "带鱼溯源解说",
+    "video_script": "咸阳的黄土高原下，河流里银鳞带鱼正和虾群追逐嬉戏。\n老农从浅滩捧起活蹦乱跳的带鱼，转眼就送到了女工灵巧的手中。\n泡沫箱刚封好冰鲜，货车已经带着这份鲜美驶向远方。",
+    "video_terms": "",
+    "video_aspect": "9:16",
+    "video_concat_mode": "random",
+    "video_transition_mode": "None",
+    "video_clip_duration": 3,
+    "video_count": 1,
+    "video_source": "local",
+    "video_materials": [
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\c8a70298-5886-47ee-9eb3-8678fb3e682b_video_AA_剧情故事-产品溯源-{舟山带鱼}-01-A-{镜头缓缓向前推进}.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\b1ea2580-a987-4176-8a63-586a53addb11_video_AA_剧情故事-产品溯源-{舟山带鱼}-02-A-{镜头缓缓平移}.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\8b70f372-b991-4b85-8c2c-4cff889d5330_video_AA_剧情故事-产品溯源-{舟山带鱼}-03-A-{}.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\342e8674-c494-458f-918f-ea18dcf07547_video_AA_剧情故事-产品溯源-{舟山带鱼}-04-A-{镜头平移聚焦农民动作  }.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\4fc57af3-3e22-403f-b1c2-a3e04d0e6859_video_AA_剧情故事-产品溯源-{舟山带鱼}-05-A-{}.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\ff0fedaf-0ba8-4dcc-930e-0a0846d6540e_video_AA_剧情故事-产品溯源-{舟山带鱼}-06-A-{}.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\c2677e38-1014-4372-8e58-3ac4267810da_video_AA_剧情故事-产品溯源-{舟山带鱼}-07-A-{镜头缓缓升高}.png_1.mp4",
+            "duration": 0
+        }
+    ],
+    "custom_audio_file": null,
+    "video_language": "",
+    "voice_name": "zh-CN-XiaoxiaoNeural-Female",
+    "voice_volume": 1.0,
+    "voice_rate": 1.0,
+    "bgm_type": "random",
+    "bgm_file": "",
+    "bgm_volume": 0.2,
+    "subtitle_enabled": true,
+    "subtitle_position": "bottom",
+    "custom_position": 70.0,
+    "font_name": "MicrosoftYaHeiBold.ttc",
+    "text_fore_color": "#FFFFFF",
+    "text_background_color": true,
+    "font_size": 60,
+    "stroke_color": "#000000",
+    "stroke_width": 1.5,
+    "n_threads": 6,
+    "paragraph_number": 1
+}
+
+2025-12-31 10:37:24.966 | INFO     | app.services.task:start:247 - start task: b51dddc8-2d15-48f7-8538-97259e7d7d85, stop_at: video
+
+2025-12-31 10:37:24.967 | INFO     | app.services.task:generate_script:17 - 
+
+## generating video script
+
+2025-12-31 10:37:24.967 | DEBUG    | app.services.task:generate_script:26 - video script: 
+咸阳的黄土高原下，河流里银鳞带鱼正和虾群追逐嬉戏。
+老农从浅滩捧起活蹦乱跳的带鱼，转眼就送到了女工灵巧的手中。
+泡沫箱刚封好冰鲜，货车已经带着这份鲜美驶向远方。
+
+2025-12-31 10:37:24.969 | INFO     | app.services.task:generate_audio:84 - 
+
+## generating audio
+
+2025-12-31 10:37:24.970 | INFO     | app.services.task:generate_audio:92 - no custom audio file provided, using TTS to generate audio.
+
+2025-12-31 10:37:24.971 | INFO     | app.services.voice:azure_tts_v1:1178 - start, voice name: zh-CN-XiaoxiaoNeural, try: 1
+
+2025-12-31 10:37:26.732 | INFO     | app.services.voice:azure_tts_v1:1198 - completed, output file: .\storage\tasks\b51dddc8-2d15-48f7-8538-97259e7d7d85\audio.mp3
+
+2025-12-31 10:37:26.733 | INFO     | app.services.task:generate_subtitle:132 - 
+
+## generating subtitle
+
+2025-12-31 10:37:26.734 | INFO     | app.services.task:generate_subtitle:138 - 
+
+## generating subtitle, provider: edge
+
+2025-12-31 10:37:26.736 | INFO     | app.services.voice:create_subtitle:1649 - completed, subtitle file created: .\storage\tasks\b51dddc8-2d15-48f7-8538-97259e7d7d85\subtitle.srt, duration: 16.975
+
+2025-12-31 10:37:26.737 | INFO     | app.services.task:get_video_materials:164 - 
+
+## preprocess local materials
+
+2025-12-31 10:37:27.573 | INFO     | app.services.task:generate_final_videos:211 - 
+
+## combining video: 1 => .\storage\tasks\b51dddc8-2d15-48f7-8538-97259e7d7d85\combined-1.mp4
+
+2025-12-31 10:37:27.644 | INFO     | app.services.video:combine_videos:129 - audio duration: 17.54 seconds
+
+2025-12-31 10:37:27.644 | INFO     | app.services.video:combine_videos:133 - maximum clip duration: 3 seconds
+
+2025-12-31 10:37:28.895 | DEBUG    | app.services.video:combine_videos:162 - total subclipped items: 7
+
+2025-12-31 10:37:28.896 | DEBUG    | app.services.video:combine_videos:169 - processing clip 1: 704x1248, current duration: 0.00s, remaining: 17.54s
+
+2025-12-31 10:37:29.011 | DEBUG    | app.services.video:combine_videos:179 - resizing clip, source: 704x1248, ratio: 0.56, target: 1080x1920, ratio: 0.56
+
+2025-12-31 10:37:46.511 | DEBUG    | app.services.video:combine_videos:169 - processing clip 2: 704x1248, current duration: 3.00s, remaining: 14.54s
+
+2025-12-31 10:37:46.628 | DEBUG    | app.services.video:combine_videos:179 - resizing clip, source: 704x1248, ratio: 0.56, target: 1080x1920, ratio: 0.56
+
+2025-12-31 10:38:03.652 | DEBUG    | app.services.video:combine_videos:169 - processing clip 3: 704x1248, current duration: 6.00s, remaining: 11.54s
+
+2025-12-31 10:38:03.773 | DEBUG    | app.services.video:combine_videos:179 - resizing clip, source: 704x1248, ratio: 0.56, target: 1080x1920, ratio: 0.56
+
+2025-12-31 10:38:20.793 | DEBUG    | app.services.video:combine_videos:169 - processing clip 4: 704x1248, current duration: 9.00s, remaining: 8.54s
+
+2025-12-31 10:38:20.914 | DEBUG    | app.services.video:combine_videos:179 - resizing clip, source: 704x1248, ratio: 0.56, target: 1080x1920, ratio: 0.56
+
+2025-12-31 10:38:37.814 | DEBUG    | app.services.video:combine_videos:169 - processing clip 5: 704x1248, current duration: 12.00s, remaining: 5.54s
+
+2025-12-31 10:38:37.937 | DEBUG    | app.services.video:combine_videos:179 - resizing clip, source: 704x1248, ratio: 0.56, target: 1080x1920, ratio: 0.56
+
+2025-12-31 10:38:54.498 | DEBUG    | app.services.video:combine_videos:169 - processing clip 6: 704x1248, current duration: 15.00s, remaining: 2.54s
+
+2025-12-31 10:38:54.627 | DEBUG    | app.services.video:combine_videos:179 - resizing clip, source: 704x1248, ratio: 0.56, target: 1080x1920, ratio: 0.56
+
+2025-12-31 10:39:11.765 | INFO     | app.services.video:combine_videos:244 - starting clip merging process
+
+2025-12-31 10:39:11.774 | INFO     | app.services.video:combine_videos:267 - merging clip 1/5, duration: 3.00s
+
+2025-12-31 10:39:16.152 | INFO     | app.services.video:combine_videos:267 - merging clip 2/5, duration: 3.00s
+
+2025-12-31 10:39:22.381 | INFO     | app.services.video:combine_videos:267 - merging clip 3/5, duration: 3.00s
+
+2025-12-31 10:39:30.210 | INFO     | app.services.video:combine_videos:267 - merging clip 4/5, duration: 3.00s
+
+2025-12-31 10:39:39.762 | INFO     | app.services.video:combine_videos:267 - merging clip 5/5, duration: 3.00s
+
+2025-12-31 10:39:51.484 | INFO     | app.services.video:combine_videos:305 - video combining completed
+
+2025-12-31 10:39:51.489 | INFO     | app.services.task:generate_final_videos:228 - 
+
+## generating video: 1 => .\storage\tasks\b51dddc8-2d15-48f7-8538-97259e7d7d85\final-1.mp4
+
+2025-12-31 10:39:51.490 | INFO     | app.services.video:generate_video:373 - generating video: 1080 x 1920
+
+2025-12-31 10:39:51.491 | INFO     | app.services.video:generate_video:374 -   ① video: .\storage\tasks\b51dddc8-2d15-48f7-8538-97259e7d7d85\combined-1.mp4
+
+2025-12-31 10:39:51.492 | INFO     | app.services.video:generate_video:375 -   ② audio: .\storage\tasks\b51dddc8-2d15-48f7-8538-97259e7d7d85\audio.mp3
+
+2025-12-31 10:39:51.493 | INFO     | app.services.video:generate_video:376 -   ③ subtitle: .\storage\tasks\b51dddc8-2d15-48f7-8538-97259e7d7d85\subtitle.srt
+
+2025-12-31 10:39:51.494 | INFO     | app.services.video:generate_video:377 -   ④ output: .\storage\tasks\b51dddc8-2d15-48f7-8538-97259e7d7d85\final-1.mp4
+
+2025-12-31 10:39:51.494 | INFO     | app.services.video:generate_video:392 -   ⑤ font: D:/code4/51_computer/maven/MoneyPrinterTurbo/resource/fonts/MicrosoftYaHeiBold.ttc
+
+2025-12-31 10:40:51.101 | SUCCESS  | app.services.task:start:348 - task b51dddc8-2d15-48f7-8538-97259e7d7d85 finished, generated 1 videos.
+
+2025-12-31 10:40:51.197 | INFO     | __main__:<module>:1064 - 视频生成完成
