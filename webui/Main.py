@@ -587,7 +587,7 @@ with middle_panel:
 
         selected_index = st.selectbox(
             tr("Video Concat Mode"),
-            index=1,
+            index=0,  # 默认选择顺序拼接（Sequential）
             options=range(
                 len(video_concat_modes)
             ),  # Use the index as the internal option value

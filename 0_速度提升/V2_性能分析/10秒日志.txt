@@ -1,0 +1,235 @@
+2025-12-31 14:28:15.695 | INFO     | __main__:<module>:1053 - 开始生成视频
+
+2025-12-31 14:28:15.696 | INFO     | __main__:<module>:1054 - {
+    "video_subject": "带鱼溯源",
+    "video_script": "咸阳的黄土高原下，河流里银鳞带鱼正和虾群追逐嬉戏。\n老农从浅滩捧起活蹦乱跳的带鱼，转眼就送到了女工灵巧的手中。\n泡沫箱刚封好冰鲜，货车已经带着这份鲜美驶向远方。",
+    "video_terms": "",
+    "video_aspect": "original",
+    "video_concat_mode": "sequential",
+    "video_transition_mode": "None",
+    "video_clip_duration": 3,
+    "video_count": 1,
+    "video_source": "local",
+    "video_materials": [
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\edd1577a-6090-4e7d-b916-a5a450ea3f99_video_AA_剧情故事-产品溯源-{舟山带鱼}-01-A-{镜头缓缓向前推进}.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\d115b313-b1b7-4816-997e-4e67f9064101_video_AA_剧情故事-产品溯源-{舟山带鱼}-02-A-{镜头缓缓平移}.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\cb2d7181-8952-44c9-95ee-79c2a7c70a1f_video_AA_剧情故事-产品溯源-{舟山带鱼}-03-A-{}.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\ed46a613-797f-406d-833b-828a9b0a9c20_video_AA_剧情故事-产品溯源-{舟山带鱼}-04-A-{镜头平移聚焦农民动作  }.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\3b73e791-d231-4a52-991c-a3fd6fed798f_video_AA_剧情故事-产品溯源-{舟山带鱼}-05-A-{}.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\d5729244-5b94-460c-a1e1-181964717d0e_video_AA_剧情故事-产品溯源-{舟山带鱼}-06-A-{}.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\c942e4aa-21cc-4b03-941c-c14366dcb002_video_AA_剧情故事-产品溯源-{舟山带鱼}-07-A-{镜头缓缓升高}.png_1.mp4",
+            "duration": 0
+        }
+    ],
+    "custom_audio_file": null,
+    "video_language": "",
+    "voice_name": "zh-CN-XiaoxiaoNeural-Female",
+    "voice_volume": 1.0,
+    "voice_rate": 1.0,
+    "bgm_type": "random",
+    "bgm_file": "",
+    "bgm_volume": 0.2,
+    "subtitle_enabled": true,
+    "subtitle_position": "bottom",
+    "custom_position": 70.0,
+    "font_name": "MicrosoftYaHeiBold.ttc",
+    "text_fore_color": "#FFFFFF",
+    "text_background_color": true,
+    "font_size": 40,
+    "stroke_color": "#000000",
+    "stroke_width": 1.5,
+    "n_threads": 6,
+    "paragraph_number": 1
+}
+
+2025-12-31 14:28:15.698 | INFO     | app.services.task:start:247 - start task: 96f225b4-b0cf-4b5e-9be6-fd4083fc7ce5, stop_at: video
+
+2025-12-31 14:28:15.698 | INFO     | app.services.task:generate_script:17 - 
+
+## generating video script
+
+2025-12-31 14:28:15.699 | DEBUG    | app.services.task:generate_script:26 - video script: 
+咸阳的黄土高原下，河流里银鳞带鱼正和虾群追逐嬉戏。
+老农从浅滩捧起活蹦乱跳的带鱼，转眼就送到了女工灵巧的手中。
+泡沫箱刚封好冰鲜，货车已经带着这份鲜美驶向远方。
+
+2025-12-31 14:28:15.701 | INFO     | app.services.task:generate_audio:84 - 
+
+## generating audio
+
+2025-12-31 14:28:15.702 | INFO     | app.services.task:generate_audio:92 - no custom audio file provided, using TTS to generate audio.
+
+2025-12-31 14:28:15.703 | INFO     | app.services.voice:azure_tts_v1:1178 - start, voice name: zh-CN-XiaoxiaoNeural, try: 1
+
+2025-12-31 14:28:17.301 | INFO     | app.services.voice:azure_tts_v1:1198 - completed, output file: .\storage\tasks\96f225b4-b0cf-4b5e-9be6-fd4083fc7ce5\audio.mp3
+
+2025-12-31 14:28:17.302 | INFO     | app.services.task:generate_subtitle:132 - 
+
+## generating subtitle
+
+2025-12-31 14:28:17.303 | INFO     | app.services.task:generate_subtitle:138 - 
+
+## generating subtitle, provider: edge
+
+2025-12-31 14:28:17.304 | INFO     | app.services.voice:create_subtitle:1649 - completed, subtitle file created: .\storage\tasks\96f225b4-b0cf-4b5e-9be6-fd4083fc7ce5\subtitle.srt, duration: 16.975
+
+2025-12-31 14:28:17.305 | INFO     | app.services.task:get_video_materials:164 - 
+
+## preprocess local materials
+
+2025-12-31 14:28:18.138 | INFO     | app.services.task:generate_final_videos:211 - 
+
+## combining video: 1 => .\storage\tasks\96f225b4-b0cf-4b5e-9be6-fd4083fc7ce5\combined-1.mp4
+
+2025-12-31 14:28:18.207 | INFO     | app.services.video:combine_videos:627 - audio duration: 17.54 seconds
+
+2025-12-31 14:28:18.208 | INFO     | app.services.video:combine_videos:631 - maximum clip duration: 3 seconds
+
+2025-12-31 14:28:19.374 | INFO     | app.services.video:combine_videos:665 - using original aspect ratio: 704x1248 (from first clip)
+
+2025-12-31 14:28:19.376 | DEBUG    | app.services.video:combine_videos:671 - total subclipped items: 7
+
+2025-12-31 14:28:19.404 | DEBUG    | app.services.video:get_gpu_scale_filter:271 - ⚠️ GPU缩放滤镜 scale_npp 不支持，回退到CPU缩放
+
+2025-12-31 14:28:19.405 | INFO     | app.services.video:get_gpu_scale_filter_cached:292 - ℹ️ 使用CPU缩放
+
+2025-12-31 14:28:19.406 | INFO     | app.services.video:combine_videos:679 - 🚀 使用并行处理: 7 个worker处理 7 个clips
+
+2025-12-31 14:28:19.407 | DEBUG    | app.services.video:process_single_clip:485 - processing clip 1: 704x1248
+
+2025-12-31 14:28:19.408 | DEBUG    | app.services.video:process_single_clip:485 - processing clip 2: 704x1248
+
+2025-12-31 14:28:19.409 | DEBUG    | app.services.video:process_single_clip:485 - processing clip 3: 704x1248
+
+2025-12-31 14:28:19.409 | DEBUG    | app.services.video:process_single_clip:485 - processing clip 4: 704x1248
+
+2025-12-31 14:28:19.410 | DEBUG    | app.services.video:process_single_clip:485 - processing clip 5: 704x1248
+
+2025-12-31 14:28:19.410 | DEBUG    | app.services.video:process_single_clip:485 - processing clip 6: 704x1248
+
+2025-12-31 14:28:19.412 | DEBUG    | app.services.video:process_single_clip:485 - processing clip 7: 704x1248
+
+2025-12-31 14:28:21.446 | DEBUG    | app.services.video:combine_videos:715 - ✅ clip 3 处理完成, duration: 3.00s, total: 3.00s
+
+2025-12-31 14:28:21.505 | DEBUG    | app.services.video:combine_videos:715 - ✅ clip 5 处理完成, duration: 3.00s, total: 6.00s
+
+2025-12-31 14:28:21.561 | DEBUG    | app.services.video:combine_videos:715 - ✅ clip 1 处理完成, duration: 3.00s, total: 9.00s
+
+2025-12-31 14:28:21.562 | DEBUG    | app.services.video:combine_videos:715 - ✅ clip 4 处理完成, duration: 3.00s, total: 12.00s
+
+2025-12-31 14:28:21.563 | DEBUG    | app.services.video:combine_videos:715 - ✅ clip 7 处理完成, duration: 3.00s, total: 15.00s
+
+2025-12-31 14:28:21.564 | DEBUG    | app.services.video:combine_videos:715 - ✅ clip 2 处理完成, duration: 3.00s, total: 18.00s
+
+2025-12-31 14:28:21.564 | DEBUG    | app.services.video:combine_videos:715 - ✅ clip 6 处理完成, duration: 3.00s, total: 21.00s
+
+2025-12-31 14:28:21.566 | INFO     | app.services.video:combine_videos:736 - starting clip merging process
+
+2025-12-31 14:28:21.567 | INFO     | app.services.video:combine_videos:770 - 🚀 使用FFmpeg concat demuxer合并 7 个视频（性能优化）
+
+2025-12-31 14:28:21.696 | INFO     | app.services.video:combine_videos:791 - ✅ FFmpeg concat合并成功
+
+2025-12-31 14:28:21.699 | INFO     | app.services.video:combine_videos:800 - video combining completed
+
+2025-12-31 14:28:21.700 | INFO     | app.services.task:generate_final_videos:228 - 
+
+## generating video: 1 => .\storage\tasks\96f225b4-b0cf-4b5e-9be6-fd4083fc7ce5\final-1.mp4
+
+2025-12-31 14:28:21.868 | INFO     | app.services.video:generate_video:1232 - using original aspect ratio: 704 x 1248 (from input video)
+
+2025-12-31 14:28:21.870 | INFO     | app.services.video:generate_video:1234 - generating video: 704 x 1248
+
+2025-12-31 14:28:21.871 | INFO     | app.services.video:generate_video:1235 -   ① video: .\storage\tasks\96f225b4-b0cf-4b5e-9be6-fd4083fc7ce5\combined-1.mp4
+
+2025-12-31 14:28:21.872 | INFO     | app.services.video:generate_video:1236 -   ② audio: .\storage\tasks\96f225b4-b0cf-4b5e-9be6-fd4083fc7ce5\audio.mp3
+
+2025-12-31 14:28:21.872 | INFO     | app.services.video:generate_video:1237 -   ③ subtitle: .\storage\tasks\96f225b4-b0cf-4b5e-9be6-fd4083fc7ce5\subtitle.srt
+
+2025-12-31 14:28:21.873 | INFO     | app.services.video:generate_video:1238 -   ④ output: .\storage\tasks\96f225b4-b0cf-4b5e-9be6-fd4083fc7ce5\final-1.mp4
+
+2025-12-31 14:28:21.874 | INFO     | app.services.video:generate_video:1253 -   ⑤ font: D:/code4/51_computer/maven/MoneyPrinterTurbo/resource/fonts/MicrosoftYaHeiBold.ttc
+
+2025-12-31 14:28:21.876 | DEBUG    | app.services.video:get_font_internal_name:1018 - 字体真实名称: Microsoft YaHei (样式: Bold)
+
+2025-12-31 14:28:21.877 | INFO     | app.services.video:srt_to_ass:1074 - 📝 使用字体: Microsoft YaHei (文件: MicrosoftYaHeiBold.ttc)
+
+2025-12-31 14:28:21.878 | DEBUG    | app.services.video:srt_to_ass:1083 - 字体大小计算: 基础大小=40, 视频高度=1248
+
+2025-12-31 14:28:21.879 | DEBUG    | app.services.video:srt_to_ass:1094 - 字体大小缩放: 缩放比例=0.65, 计算后=26, 最小值=62, 最终=62
+
+2025-12-31 14:28:21.879 | DEBUG    | app.services.video:srt_to_ass:1149 - Style行验证: ScaleX=100, ScaleY=100, Alignment=2, FontSize=62
+
+2025-12-31 14:28:21.881 | INFO     | app.services.video:srt_to_ass:1199 - ✅ SRT转换为ASS成功: .\storage\tasks\96f225b4-b0cf-4b5e-9be6-fd4083fc7ce5\subtitle.ass
+
+2025-12-31 14:28:21.882 | INFO     | app.services.video:srt_to_ass:1200 -    - 分辨率: 704x1248
+
+2025-12-31 14:28:21.883 | INFO     | app.services.video:srt_to_ass:1201 -    - 字体: Microsoft YaHei (大小: 62, 描边: 1)
+
+2025-12-31 14:28:21.883 | INFO     | app.services.video:srt_to_ass:1202 -    - 位置: alignment=2, margin_v=62
+
+2025-12-31 14:28:21.884 | INFO     | app.services.video:srt_to_ass:1203 -    - 字幕事件数: 6
+
+2025-12-31 14:28:21.885 | DEBUG    | app.services.video:srt_to_ass:1208 - ASS文件预览:
+[Script Info]
+Title: MoneyPrinterTurbo Subtitle
+ScriptType: v4.00+
+PlayResX: 704
+PlayResY: 1248
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Microsoft YaHei,62,&HFFFFFF&,&HFFFFFF&,&H000000&,&H000000&,0,0,0,0,100,100,0,0,1,1,0,2,10,10,62,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.10,0:00:01.68,Default,,0,0,0,,咸阳的黄土高原下
+Dialogue: 0,0:00:01.98,0:00:05.27,Default,,0,0,0,,河流里银鳞带鱼正和虾群追逐嬉戏
+Dialogue: 0,0:00:05.85,0:00:08.81,Default,,0,0,0,,老农从浅滩捧起活蹦乱跳的带鱼
+
+2025-12-31 14:28:21.917 | INFO     | app.services.video:generate_video:1310 - ✅ 使用FFmpeg ass滤镜渲染字幕（性能优化）
+
+2025-12-31 14:28:24.836 | INFO     | app.services.video:generate_video:1378 - 🎬 使用FFmpeg添加字幕...
+
+2025-12-31 14:28:24.837 | INFO     | app.services.video:generate_video:1451 - 🎬 FFmpeg字幕命令:
+
+2025-12-31 14:28:24.838 | INFO     | app.services.video:generate_video:1452 -    - ASS文件: .\storage\tasks\96f225b4-b0cf-4b5e-9be6-fd4083fc7ce5\subtitle.ass
+
+2025-12-31 14:28:24.839 | INFO     | app.services.video:generate_video:1453 -    - 字体目录: .\resource\fonts
+
+2025-12-31 14:28:24.840 | INFO     | app.services.video:generate_video:1454 -    - 视频滤镜: ass='D\:/code4/51_computer/maven/MoneyPrinterTurbo/storage/tasks/96f225b4-b0cf-4b5e-9be6-fd4083fc7ce5/subtitle.ass':fontsdir='D\:/code4/51_computer/maven/MoneyPrinterTurbo/resource/fonts',format=yuv420p
+
+2025-12-31 14:28:24.840 | DEBUG    | app.services.video:generate_video:1455 - 完整命令: .\resource\ffmpeg.exe -i D:/code4/51_computer/maven/MoneyPrinterTurbo/storage/tasks/96f225b4-b0cf-4b5e-9be6-fd4083fc7ce5/temp_no_subtitle.mp4 -vf ass='D\:/code4/51_computer/maven/MoneyPrinterTurbo/storage/tasks/96f225b4-b0cf-4b5e-9be6-fd4083fc7ce5/subtitle.ass':fontsdir='D\:/code4/51_computer/maven/MoneyPrinterTurbo/resource/fonts',format=yuv420p -c:v h264_nvenc -c:a aac -preset fast -threads 6 -pix_fmt yuv420p -y .\storage\tasks\96f225b4-b0cf-4b5e-9be6-fd4083fc7ce5\final-1.mp4
+
+2025-12-31 14:28:25.897 | INFO     | app.services.video:generate_video:1476 - ✅ FFmpeg字幕添加成功
+
+2025-12-31 14:28:25.899 | SUCCESS  | app.services.task:start:348 - task 96f225b4-b0cf-4b5e-9be6-fd4083fc7ce5 finished, generated 1 videos.
+
+2025-12-31 14:28:25.961 | INFO     | __main__:<module>:1083 - 视频生成完成
+
+2025-12-31 14:28:25.962 | INFO     | __main__:<module>:1084 - 总耗时: 10.26秒 (0分10秒)

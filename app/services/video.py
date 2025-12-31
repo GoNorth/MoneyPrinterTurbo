@@ -617,7 +617,7 @@ def combine_videos(
     video_paths: List[str],
     audio_file: str,
     video_aspect: VideoAspect = VideoAspect.portrait,
-    video_concat_mode: VideoConcatMode = VideoConcatMode.random,
+    video_concat_mode: VideoConcatMode = VideoConcatMode.sequential,
     video_transition_mode: VideoTransitionMode = None,
     max_clip_duration: int = 5,
     threads: int = 2,

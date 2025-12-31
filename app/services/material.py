@@ -199,7 +199,7 @@ def download_videos(
     search_terms: List[str],
     source: str = "pexels",
     video_aspect: VideoAspect = VideoAspect.portrait,
-    video_contact_mode: VideoConcatMode = VideoConcatMode.random,
+    video_contact_mode: VideoConcatMode = VideoConcatMode.sequential,
     audio_duration: float = 0.0,
     max_clip_duration: int = 5,
 ) -> List[str]:
