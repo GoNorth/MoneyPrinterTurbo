@@ -623,11 +623,14 @@ with middle_panel:
             (tr("Landscape"), VideoAspect.landscape.value),
             (tr("Original"), VideoAspect.original.value),
         ]
+        # 默认选中"原始比例"（索引2）
+        default_index = 2
         selected_index = st.selectbox(
             tr("Video Ratio"),
             options=range(
                 len(video_aspect_ratios)
             ),  # Use the index as the internal option value
+            index=default_index,  # 默认选中"原始比例"
             format_func=lambda x: video_aspect_ratios[x][
                 0
             ],  # The label is displayed to the user

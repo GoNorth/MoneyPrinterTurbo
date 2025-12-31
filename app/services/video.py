@@ -6,6 +6,7 @@ import gc
 import shutil
 import subprocess
 import platform
+import re
 from typing import List, Optional, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from loguru import logger
@@ -33,6 +34,7 @@ from app.models.schema import (
 )
 from app.services.utils import video_effects
 from app.utils import utils
+from app.config import config
 
 class SubClippedVideoClip:
     def __init__(self, file_path, start_time=None, end_time=None, width=None, height=None, duration=None):
@@ -182,15 +184,29 @@ def detect_gpu() -> Optional[str]:
     
     return None
 
+def get_ffmpeg_path() -> str:
+    """
+    获取FFmpeg可执行文件路径
+    优先使用config.toml中配置的ffmpeg_path
+    """
+    # 优先使用config.toml中配置的ffmpeg_path
+    ffmpeg_exe = config.app.get("ffmpeg_path", "")
+    if ffmpeg_exe and os.path.isfile(ffmpeg_exe):
+        return ffmpeg_exe
+    # 回退到环境变量
+    ffmpeg_exe = os.environ.get("IMAGEIO_FFMPEG_EXE", "ffmpeg")
+    if os.path.isfile(ffmpeg_exe):
+        return ffmpeg_exe
+    # 最后回退到系统PATH中的ffmpeg
+    return "ffmpeg"
+
 def check_ffmpeg_encoder_support(encoder_name: str) -> bool:
     """
     检查FFmpeg是否支持指定的编码器
     """
     try:
         # 获取FFmpeg路径
-        ffmpeg_exe = os.environ.get("IMAGEIO_FFMPEG_EXE", "ffmpeg")
-        if not os.path.isfile(ffmpeg_exe):
-            ffmpeg_exe = "ffmpeg"
+        ffmpeg_exe = get_ffmpeg_path()
         
         result = subprocess.run(
             [ffmpeg_exe, "-encoders"],
@@ -213,9 +229,7 @@ def check_ffmpeg_filter_support(filter_name: str) -> bool:
     """
     try:
         # 获取FFmpeg路径
-        ffmpeg_exe = os.environ.get("IMAGEIO_FFMPEG_EXE", "ffmpeg")
-        if not os.path.isfile(ffmpeg_exe):
-            ffmpeg_exe = "ffmpeg"
+        ffmpeg_exe = get_ffmpeg_path()
         
         result = subprocess.run(
             [ffmpeg_exe, "-filters"],
@@ -355,9 +369,7 @@ def resize_clip_with_gpu(
     """
     try:
         # 获取FFmpeg路径
-        ffmpeg_exe = os.environ.get("IMAGEIO_FFMPEG_EXE", "ffmpeg")
-        if not os.path.isfile(ffmpeg_exe):
-            ffmpeg_exe = "ffmpeg"
+        ffmpeg_exe = get_ffmpeg_path()
         
         if codec is None:
             codec = video_codec
@@ -842,6 +854,226 @@ def wrap_text(text, max_width, font="Arial", fontsize=60):
     return result, height
 
 
+def hex_to_ass_color(hex_color: str) -> str:
+    """
+    将十六进制颜色转换为ASS格式的BGR颜色（十六进制格式）
+    例如: #FFFFFF -> &HFFFFFF& (白色), #000000 -> &H000000& (黑色)
+    ASS格式使用BGR顺序，不是RGB
+    ASS标准格式：&HBBGGRR& (BGR顺序，十六进制)
+    """
+    hex_color = hex_color.strip().lstrip('#')
+    if len(hex_color) != 6:
+        return "&HFFFFFF&"  # 默认白色
+    
+    try:
+        r = hex_color[0:2]  # 红色
+        g = hex_color[2:4]  # 绿色
+        b = hex_color[4:6]  # 蓝色
+        # ASS使用BGR格式：&HBBGGRR&
+        ass_color = f"&H{b}{g}{r}&"
+        return ass_color
+    except (ValueError, IndexError):
+        return "&HFFFFFF&"  # 默认白色
+
+
+def srt_time_to_ass_time(srt_time: str) -> str:
+    """
+    将SRT时间格式转换为ASS时间格式
+    SRT: 00:00:01,234 (逗号分隔毫秒)
+    ASS: 0:00:01.23 (点分隔百分秒，且去掉前导零)
+    """
+    # 替换逗号为点，并处理格式
+    time_str = srt_time.replace(',', '.')
+    parts = time_str.split(':')
+    if len(parts) == 3:
+        hours = int(parts[0])
+        minutes = int(parts[1])
+        seconds_parts = parts[2].split('.')
+        seconds = int(seconds_parts[0])
+        # 将毫秒转换为百分秒（保留2位）
+        if len(seconds_parts) > 1:
+            centiseconds = seconds_parts[1][:2].ljust(2, '0')
+        else:
+            centiseconds = "00"
+        return f"{hours}:{minutes:02d}:{seconds:02d}.{centiseconds}"
+    return time_str
+
+
+def get_ass_alignment_and_margin(position: str, custom_position: float, video_height: int, font_size: int) -> Tuple[int, int]:
+    """
+    根据位置参数计算ASS格式的Alignment和MarginV
+    ASS Alignment值:
+    1 = 左下, 2 = 中下, 3 = 右下
+    4 = 左中, 5 = 中中, 6 = 右中
+    7 = 左上, 8 = 中上, 9 = 右上
+    MarginV: 垂直边距（像素）
+    """
+    if position == "top":
+        alignment = 8  # 中上
+        margin_v = int(video_height * 0.05)
+    elif position == "bottom":
+        alignment = 2  # 中下
+        margin_v = int(video_height * 0.05)
+    elif position == "center":
+        alignment = 5  # 中中
+        margin_v = 0
+    elif position == "custom":
+        alignment = 5  # 中中
+        # custom_position是百分比（从顶部），转换为像素
+        margin_v = int((video_height - font_size) * (custom_position / 100))
+        # 确保在有效范围内
+        margin_v = max(10, min(margin_v, video_height - font_size - 10))
+    else:
+        alignment = 2  # 默认中下
+        margin_v = int(video_height * 0.05)
+    
+    return alignment, margin_v
+
+
+def srt_to_ass(srt_path: str, ass_path: str, params: VideoParams, video_width: int, video_height: int) -> bool:
+    """
+    将SRT字幕文件转换为ASS格式，应用所有样式参数
+    返回: True if success, False otherwise
+    """
+    try:
+        # 读取SRT文件（使用subtitle模块的函数）
+        from app.services import subtitle
+        subtitle_items = subtitle.file_to_subtitles(srt_path)
+        
+        if not subtitle_items:
+            logger.warning(f"SRT文件为空或格式错误: {srt_path}")
+            return False
+        
+        # 获取字体路径
+        font_path = ""
+        if params.subtitle_enabled:
+            if not params.font_name:
+                params.font_name = "STHeitiMedium.ttc"
+            font_path = os.path.join(utils.font_dir(), params.font_name)
+            if os.name == "nt":
+                font_path = font_path.replace("\\", "/")
+        
+        # 转换颜色
+        primary_color = hex_to_ass_color(params.text_fore_color or "#FFFFFF")
+        outline_color = hex_to_ass_color(params.stroke_color or "#000000")
+        
+        # 字体大小和描边宽度
+        # 根据视频分辨率缩放字体大小（默认60是针对1080p的）
+        base_font_size = int(params.font_size or 60)
+        # 如果视频高度不是1920（标准竖屏1080p），按比例缩放字体
+        if video_height != 1920:
+            # 计算缩放比例（基于高度）
+            scale_factor = video_height / 1920.0
+            font_size = int(base_font_size * scale_factor)
+            # 确保最小字体大小
+            font_size = max(20, min(font_size, 200))
+        else:
+            font_size = base_font_size
+        
+        # 描边宽度也需要按比例缩放
+        base_outline_width = float(params.stroke_width or 1.5)
+        if video_height != 1920:
+            outline_width = int(base_outline_width * scale_factor)
+            outline_width = max(1, min(outline_width, 10))
+        else:
+            outline_width = int(base_outline_width)
+        
+        # 计算位置（使用缩放后的字体大小）
+        alignment, margin_v = get_ass_alignment_and_margin(
+            params.subtitle_position or "bottom",
+            params.custom_position,
+            video_height,
+            font_size
+        )
+        
+        # 生成ASS文件
+        ass_lines = []
+        
+        # ASS文件头
+        ass_lines.append("[Script Info]")
+        ass_lines.append("Title: MoneyPrinterTurbo Subtitle")
+        ass_lines.append("ScriptType: v4.00+")
+        ass_lines.append("")
+        ass_lines.append("[V4+ Styles]")
+        ass_lines.append("Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding")
+        
+        # 样式定义
+        style_name = "Default"
+        # FFmpeg的ass滤镜需要字体族名称
+        # 对于常见字体，尝试映射到标准字体名称
+        if font_path:
+            font_basename = os.path.basename(font_path).lower()
+            # 常见字体名称映射
+            font_mapping = {
+                "microsoftyaheibold.ttc": "Microsoft YaHei",
+                "microsoftyaheinormal.ttc": "Microsoft YaHei",
+                "stheitimedium.ttc": "STHeiti",
+                "stheitilight.ttc": "STHeiti",
+                "charm-bold.ttf": "Charm",
+                "charm-regular.ttf": "Charm",
+            }
+            # 尝试从映射中获取标准字体名称
+            font_name = font_mapping.get(font_basename)
+            if not font_name:
+                # 如果没有映射，尝试从文件名提取（移除扩展名和常见后缀）
+                font_name = os.path.splitext(font_basename)[0]
+                # 移除常见后缀（Bold, Regular, Medium等）
+                for suffix in ["bold", "regular", "medium", "light", "normal"]:
+                    if font_name.endswith(suffix):
+                        font_name = font_name[:-len(suffix)].strip()
+                # 将驼峰命名转换为空格分隔（如 MicrosoftYaHei -> Microsoft YaHei）
+                # re模块已在文件顶部导入，直接使用即可
+                font_name = re.sub(r'([a-z])([A-Z])', r'\1 \2', font_name)
+                font_name = font_name.title()  # 首字母大写
+        else:
+            font_name = "Arial"
+        # ASS格式: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, 
+        # Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, 
+        # Alignment, MarginL, MarginR, MarginV, Encoding
+        # SecondaryColour和BackColour也使用十六进制格式
+        secondary_color = "&HFFFFFF&"  # 默认白色
+        back_color = "&H000000&"  # 默认黑色背景（通常设为0表示透明）
+        ass_lines.append(f"Style: {style_name},{font_name},{font_size},{primary_color},{secondary_color},{outline_color},{back_color},0,0,0,0,0,100,100,0,0,1,{outline_width},0,{alignment},10,10,{margin_v},1")
+        ass_lines.append("")
+        ass_lines.append("[Events]")
+        ass_lines.append("Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text")
+        
+        # 转换字幕事件
+        for idx, (index, time_line, text) in enumerate(subtitle_items):
+            # 解析时间
+            time_match = re.match(r"(\d{2}:\d{2}:\d{2},\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2},\d{3})", time_line)
+            if not time_match:
+                continue
+            
+            start_time = srt_time_to_ass_time(time_match.group(1))
+            end_time = srt_time_to_ass_time(time_match.group(2))
+            
+            # 清理文本（移除HTML标签等）
+            text = text.strip()
+            # 先处理换行，再转义其他字符
+            text = text.replace("\r\n", "\n").replace("\r", "\n")  # 统一换行符
+            # 转义ASS特殊字符（顺序很重要）
+            text = text.replace("\\", "\\\\")  # 先转义反斜杠
+            text = text.replace("{", "\\{")
+            text = text.replace("}", "\\}")
+            text = text.replace("\n", "\\N")  # ASS换行符
+            
+            # 字幕事件格式: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+            ass_lines.append(f"Dialogue: 0,{start_time},{end_time},{style_name},,0,0,0,,{text}")
+        
+        # 写入ASS文件（使用绝对路径）
+        ass_path_abs = os.path.abspath(ass_path)
+        with open(ass_path_abs, "w", encoding="utf-8-sig") as f:  # UTF-8 with BOM for Windows compatibility
+            f.write("\n".join(ass_lines))
+        
+        logger.info(f"✅ SRT转换为ASS成功: {ass_path_abs}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"❌ SRT转ASS失败: {str(e)}")
+        return False
+
+
 def generate_video(
     video_path: str,
     audio_path: str,
@@ -924,19 +1156,40 @@ def generate_video(
             _clip = _clip.with_position(("center", "center"))
         return _clip
 
+    # 处理字幕：优先使用FFmpeg ass滤镜（更快），失败则回退到MoviePy
+    use_ffmpeg_subtitle = False
+    ass_path = None
+    
+    if subtitle_path and os.path.exists(subtitle_path) and params.subtitle_enabled:
+        # 尝试使用FFmpeg ass滤镜
+        ass_path = os.path.join(output_dir, "subtitle.ass")
+        if srt_to_ass(subtitle_path, ass_path, params, video_width, video_height):
+            # 检查FFmpeg是否支持ass滤镜
+            if check_ffmpeg_filter_support("ass"):
+                use_ffmpeg_subtitle = True
+                logger.info("✅ 使用FFmpeg ass滤镜渲染字幕（性能优化）")
+            else:
+                logger.warning("⚠️ FFmpeg不支持ass滤镜，回退到MoviePy方式")
+                use_ffmpeg_subtitle = False
+        else:
+            logger.warning("⚠️ SRT转ASS失败，回退到MoviePy方式")
+            use_ffmpeg_subtitle = False
+    
     video_clip = VideoFileClip(video_path).without_audio()
     audio_clip = AudioFileClip(audio_path).with_effects(
         [afx.MultiplyVolume(params.voice_volume)]
     )
 
-    def make_textclip(text):
-        return TextClip(
-            text=text,
-            font=font_path,
-            font_size=params.font_size,
-        )
+    # 如果使用FFmpeg字幕，不需要在MoviePy中处理字幕
+    if subtitle_path and os.path.exists(subtitle_path) and params.subtitle_enabled and not use_ffmpeg_subtitle:
+        # 回退到MoviePy方式
+        def make_textclip(text):
+            return TextClip(
+                text=text,
+                font=font_path,
+                font_size=params.font_size,
+            )
 
-    if subtitle_path and os.path.exists(subtitle_path):
         sub = SubtitlesClip(
             subtitles=subtitle_path, encoding="utf-8", make_textclip=make_textclip
         )
@@ -945,6 +1198,7 @@ def generate_video(
             clip = create_text_clip(subtitle_item=item)
             text_clips.append(clip)
         video_clip = CompositeVideoClip([video_clip, *text_clips])
+        logger.info("ℹ️ 使用MoviePy TextClip渲染字幕（回退模式）")
 
     bgm_file = get_bgm_file(bgm_type=params.bgm_type, bgm_file=params.bgm_file)
     if bgm_file:
@@ -961,18 +1215,245 @@ def generate_video(
             logger.error(f"failed to add bgm: {str(e)}")
 
     video_clip = video_clip.with_audio(audio_clip)
-    write_videofile_with_fallback(
-        video_clip,
-        output_file,
-        codec=video_codec,
-        audio_codec=audio_codec,
-        temp_audiofile_path=output_dir,
-        threads=params.n_threads or 2,
-        logger=None,
-        fps=fps,
-    )
-    video_clip.close()
-    del video_clip
+    
+    # 如果使用FFmpeg字幕，需要先生成无字幕视频，然后通过FFmpeg添加字幕
+    if use_ffmpeg_subtitle and ass_path:
+        # 先生成临时无字幕视频
+        temp_video_no_sub = os.path.join(output_dir, "temp_no_subtitle.mp4")
+        try:
+            write_videofile_with_fallback(
+                video_clip,
+                temp_video_no_sub,
+                codec=video_codec,
+                audio_codec=audio_codec,
+                temp_audiofile_path=output_dir,
+                threads=params.n_threads or 2,
+                logger=None,
+                fps=fps,
+            )
+            video_clip.close()
+            del video_clip
+            
+            # 使用FFmpeg添加字幕
+            logger.info("🎬 使用FFmpeg添加字幕...")
+            # 使用统一的FFmpeg路径获取函数
+            ffmpeg_exe = get_ffmpeg_path()
+            
+            # 处理Windows路径：转换为绝对路径
+            ass_path_abs = os.path.abspath(ass_path)
+            temp_video_abs = os.path.abspath(temp_video_no_sub)
+            output_file_abs = os.path.abspath(output_file)
+            
+            # Windows下，FFmpeg的ass滤镜路径需要特殊处理
+            # 问题：FFmpeg在处理Windows路径时，会将路径中的冒号（:）误认为是滤镜参数的分隔符
+            # 解决方案：使用正斜杠路径，转义冒号，并用单引号包裹
+            if os.name == "nt":
+                # 1. 确保是绝对路径
+                ass_path_abs = os.path.abspath(ass_path)
+                temp_video_abs = os.path.abspath(temp_video_no_sub)
+                output_file_abs = os.path.abspath(output_file)
+                font_dir_abs = os.path.abspath(utils.font_dir())
+                
+                # 2. 将反斜杠转换为正斜杠（FFmpeg在Windows上也支持正斜杠）
+                ass_path_ffmpeg = ass_path_abs.replace("\\", "/")
+                font_dir_ffmpeg = font_dir_abs.replace("\\", "/")
+                
+                # 3. 关键：转义驱动盘符后的冒号（例如 D: -> D\:）
+                # 这样FFmpeg才会把 D\: 识别为路径的一部分，而不是参数分隔符
+                ass_path_ffmpeg = ass_path_ffmpeg.replace(":", "\\:")
+                font_dir_ffmpeg = font_dir_ffmpeg.replace(":", "\\:")
+                
+                # 4. 使用单引号包裹路径，处理空格和特殊字符
+                ass_filter_base = f"ass='{ass_path_ffmpeg}'"
+                font_dir_param = f":fontsdir='{font_dir_ffmpeg}'"
+                
+                # 输入/输出文件路径（滤镜外）可以使用标准正斜杠
+                temp_video_abs_ffmpeg = temp_video_abs.replace("\\", "/")
+                output_file_abs_ffmpeg = output_file_abs.replace("\\", "/")
+            else:
+                # Linux/Mac逻辑保持简单
+                ass_path_abs_ffmpeg = os.path.abspath(ass_path)
+                font_dir_ffmpeg = os.path.abspath(utils.font_dir())
+                temp_video_abs_ffmpeg = temp_video_abs
+                output_file_abs_ffmpeg = output_file_abs
+                
+                # 如果路径包含空格，使用引号
+                if " " in ass_path_abs_ffmpeg:
+                    ass_filter_base = f"ass='{ass_path_abs_ffmpeg}'"
+                else:
+                    ass_filter_base = f"ass={ass_path_abs_ffmpeg}"
+                font_dir_param = f":fontsdir='{font_dir_ffmpeg}'" if " " in font_dir_ffmpeg else f":fontsdir={font_dir_ffmpeg}"
+            
+            # 构建FFmpeg命令
+            # 注意：在Windows下，输出文件路径使用系统绝对路径即可，subprocess会自动处理
+            # 添加色彩格式参数，确保视频色彩正确
+            # 字体目录路径已在上面处理，这里直接使用font_dir_param
+            ass_filter_with_fonts = f"{ass_filter_base}{font_dir_param}"
+            
+            # 构建完整的视频滤镜链：ass字幕 + format转换
+            # 使用逗号分隔多个滤镜（在同一个滤镜链中）
+            video_filter = f"{ass_filter_with_fonts},format=yuv420p"
+            
+            cmd = [
+                ffmpeg_exe,
+                "-i", temp_video_abs_ffmpeg,
+                "-vf", video_filter,  # 视频滤镜链
+                "-c:v", video_codec,
+                "-c:a", audio_codec,
+                "-preset", "fast",
+                "-threads", str(params.n_threads or 2),
+                "-pix_fmt", "yuv420p",  # 明确指定像素格式
+                "-y",  # 覆盖输出文件
+                output_file_abs  # 使用系统绝对路径，subprocess会自动处理
+            ]
+            
+            logger.debug(f"FFmpeg命令: {' '.join(cmd)}")
+            
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=600,  # 10分钟超时
+                creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
+            )
+            
+            if result.returncode == 0 and os.path.exists(output_file):
+                logger.info("✅ FFmpeg字幕添加成功")
+                # 清理临时文件
+                try:
+                    if os.path.exists(temp_video_no_sub):
+                        os.remove(temp_video_no_sub)
+                    if os.path.exists(ass_path):
+                        os.remove(ass_path)
+                except:
+                    pass
+                return
+            else:
+                # 输出完整的错误信息用于调试
+                error_msg = result.stderr if result.stderr else result.stdout if result.stdout else "unknown error"
+                logger.warning(f"⚠️ FFmpeg字幕添加失败 (返回码: {result.returncode})")
+                # 输出完整的错误信息（最多2000字符）
+                if error_msg:
+                    # 尝试提取关键错误信息（跳过版本信息等）
+                    error_lines = error_msg.split('\n')
+                    key_errors = [line for line in error_lines if any(keyword in line.lower() for keyword in ['error', 'failed', 'cannot', 'invalid', 'unable', 'no such'])]
+                    if key_errors:
+                        logger.error(f"FFmpeg关键错误: {'; '.join(key_errors[:5])}")
+                    else:
+                        logger.debug(f"FFmpeg完整输出: {error_msg[:2000]}")
+                logger.info("🔄 回退到MoviePy方式...")
+                # 回退：重新加载视频并使用MoviePy方式
+                video_clip = VideoFileClip(temp_video_no_sub).without_audio()
+                audio_clip = AudioFileClip(audio_path).with_effects(
+                    [afx.MultiplyVolume(params.voice_volume)]
+                )
+                
+                def make_textclip(text):
+                    return TextClip(
+                        text=text,
+                        font=font_path,
+                        font_size=params.font_size,
+                    )
+                
+                sub = SubtitlesClip(
+                    subtitles=subtitle_path, encoding="utf-8", make_textclip=make_textclip
+                )
+                text_clips = []
+                for item in sub.subtitles:
+                    clip = create_text_clip(subtitle_item=item)
+                    text_clips.append(clip)
+                video_clip = CompositeVideoClip([video_clip, *text_clips])
+                video_clip = video_clip.with_audio(audio_clip)
+                
+                write_videofile_with_fallback(
+                    video_clip,
+                    output_file,
+                    codec=video_codec,
+                    audio_codec=audio_codec,
+                    temp_audiofile_path=output_dir,
+                    threads=params.n_threads or 2,
+                    logger=None,
+                    fps=fps,
+                )
+                video_clip.close()
+                del video_clip
+                
+                # 清理临时文件
+                try:
+                    if os.path.exists(temp_video_no_sub):
+                        os.remove(temp_video_no_sub)
+                    if os.path.exists(ass_path):
+                        os.remove(ass_path)
+                except:
+                    pass
+        except Exception as e:
+            logger.error(f"❌ FFmpeg字幕处理异常: {str(e)}")
+            logger.info("🔄 回退到MoviePy方式...")
+            # 回退到MoviePy方式
+            if os.path.exists(temp_video_no_sub):
+                video_clip = VideoFileClip(temp_video_no_sub).without_audio()
+            else:
+                video_clip = VideoFileClip(video_path).without_audio()
+            
+            def make_textclip(text):
+                return TextClip(
+                    text=text,
+                    font=font_path,
+                    font_size=params.font_size,
+                )
+            
+            sub = SubtitlesClip(
+                subtitles=subtitle_path, encoding="utf-8", make_textclip=make_textclip
+            )
+            text_clips = []
+            for item in sub.subtitles:
+                clip = create_text_clip(subtitle_item=item)
+                text_clips.append(clip)
+            video_clip = CompositeVideoClip([video_clip, *text_clips])
+            video_clip = video_clip.with_audio(audio_clip)
+            
+            write_videofile_with_fallback(
+                video_clip,
+                output_file,
+                codec=video_codec,
+                audio_codec=audio_codec,
+                temp_audiofile_path=output_dir,
+                threads=params.n_threads or 2,
+                logger=None,
+                fps=fps,
+            )
+            video_clip.close()
+            del video_clip
+            
+            # 清理临时文件
+            try:
+                if os.path.exists(temp_video_no_sub):
+                    os.remove(temp_video_no_sub)
+                if ass_path and os.path.exists(ass_path):
+                    os.remove(ass_path)
+            except:
+                pass
+    else:
+        # 不使用FFmpeg字幕，直接使用MoviePy方式
+        write_videofile_with_fallback(
+            video_clip,
+            output_file,
+            codec=video_codec,
+            audio_codec=audio_codec,
+            temp_audiofile_path=output_dir,
+            threads=params.n_threads or 2,
+            logger=None,
+            fps=fps,
+        )
+        video_clip.close()
+        del video_clip
+        
+        # 清理临时ASS文件（如果存在）
+        if ass_path and os.path.exists(ass_path):
+            try:
+                os.remove(ass_path)
+            except:
+                pass
 
 
 def preprocess_video(materials: List[MaterialInfo], clip_duration=4):

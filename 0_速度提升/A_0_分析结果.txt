@@ -209,15 +209,41 @@
    - 预期效果：重复使用相同素材时，可节省100%的缩放时间
    - 难度：简单，主要是文件管理和hash计算
 
-❌ 6. 优化字幕渲染（需要修改代码）
-   - 当前状态：使用MoviePy的TextClip，逐帧渲染字幕
-   - 代码位置：app/services/video.py 第394-436行
-   - 需要修改：
-     * 考虑使用FFmpeg的subtitles滤镜直接烧录字幕（更快）
-     * 或使用ass/ssa格式字幕，通过FFmpeg filter添加
-     * 避免使用Python逐帧渲染
-   - 预期效果：可提升30-50%的最终视频生成速度
-   - 难度：中等，需要了解FFmpeg字幕滤镜
+✅ 6. 优化字幕渲染（已完成）
+   - 优化前状态：使用MoviePy的TextClip，逐帧渲染字幕
+   - 代码位置：app/services/video.py 第883-947行（原实现）
+   - 优化前实现细节：
+     * 使用SubtitlesClip读取SRT字幕文件
+     * 为每个字幕项调用create_text_clip()创建TextClip对象
+     * 使用CompositeVideoClip合成所有字幕片段到视频
+     * 支持复杂样式：字体、大小、颜色、描边、位置等
+   - 性能瓶颈（已解决）：
+     * MoviePy需要逐帧渲染每个字幕（30fps视频每秒30帧）
+     * Python循环处理每个字幕项，大量对象创建和内存操作
+     * CompositeVideoClip合成开销大，涉及大量内存拷贝
+     * 编码时重复处理所有字幕帧
+   - 优化方案（已实现）：
+     * ✅ 实现SRT到ASS格式转换函数（srt_to_ass）
+     * ✅ 实现颜色格式转换（hex_to_ass_color：十六进制到ASS BGR格式）
+     * ✅ 实现位置计算函数（get_ass_alignment_and_margin）
+     * ✅ 修改generate_video函数，优先使用FFmpeg的ass滤镜
+     * ✅ 添加完整的错误处理和回退机制（FFmpeg失败时自动回退到MoviePy）
+   - 样式参数映射（已实现）：
+     * font_name → ASS Fontname
+     * font_size → ASS Fontsize
+     * text_fore_color → ASS PrimaryColour (BGR格式)
+     * stroke_color → ASS OutlineColour
+     * stroke_width → ASS Outline
+     * subtitle_position → ASS Alignment + MarginV
+   - 实现细节：
+     * 新增函数：hex_to_ass_color() - 颜色转换
+     * 新增函数：srt_time_to_ass_time() - 时间格式转换
+     * 新增函数：get_ass_alignment_and_margin() - 位置计算
+     * 新增函数：srt_to_ass() - SRT到ASS完整转换
+     * 修改函数：generate_video() - 优先使用FFmpeg ass滤镜，失败时回退
+   - 预期效果：可提升30-50%的最终视频生成速度，显著降低内存占用
+   - 实际效果：待测试验证
+   - 详细分析：参见 D_字幕渲染优化分析.md
 
 【快速优化方案（已自动启用）】
 ✅ 1. GPU硬件加速：已自动检测并启用（如果有GPU）
