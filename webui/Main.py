@@ -1036,9 +1036,16 @@ if start_button:
     def log_received(msg):
         if config.ui["hide_log"]:
             return
-        with log_container:
-            log_records.append(msg)
-            st.code("\n".join(log_records))
+        try:
+            # 检查是否有Streamlit会话上下文（避免在多线程环境中出错）
+            # 如果不在主线程或没有会话上下文，只记录到标准输出，不更新UI
+            with log_container:
+                log_records.append(msg)
+                st.code("\n".join(log_records))
+        except Exception:
+            # 在多线程环境中（如ThreadPoolExecutor），没有Streamlit会话上下文
+            # 忽略这些错误，日志仍然会输出到标准输出（通过init_log中的sys.stdout处理器）
+            pass
 
     logger.add(log_received)
 

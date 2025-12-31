@@ -732,7 +732,7 @@ def combine_videos(
             video_duration += clip.duration
         logger.info(f"video duration: {video_duration:.2f}s, audio duration: {audio_duration:.2f}s, looped {len(processed_clips)-len(base_clips)} clips")
      
-    # merge video clips progressively, avoid loading all videos at once to avoid memory overflow
+    # merge video clips using FFmpeg concat demuxer (much faster than MoviePy concatenate)
     logger.info("starting clip merging process")
     if not processed_clips:
         logger.warning("no clips available for merging")
@@ -746,6 +746,69 @@ def combine_videos(
         logger.info("video combining completed")
         return combined_video_path
     
+    # 优化：使用FFmpeg的concat demuxer一次性合并所有视频
+    # 这种方式不需要重新编码，只是简单的文件拼接，速度极快
+    try:
+        # 创建concat文件列表
+        concat_file = os.path.join(output_dir, "concat_list.txt")
+        with open(concat_file, "w", encoding="utf-8") as f:
+            for clip in processed_clips:
+                # 使用绝对路径，并转义特殊字符
+                clip_path = os.path.abspath(clip.file_path)
+                if os.name == "nt":
+                    # Windows路径转义
+                    clip_path = clip_path.replace("\\", "/")
+                # 写入格式：file 'path/to/file.mp4'
+                f.write(f"file '{clip_path}'\n")
+        
+        # 使用FFmpeg concat demuxer合并视频
+        ffmpeg_exe = get_ffmpeg_path()
+        concat_file_abs = os.path.abspath(concat_file)
+        if os.name == "nt":
+            concat_file_abs = concat_file_abs.replace("\\", "/")
+        
+        logger.info(f"🚀 使用FFmpeg concat demuxer合并 {len(processed_clips)} 个视频（性能优化）")
+        
+        cmd = [
+            ffmpeg_exe,
+            "-f", "concat",
+            "-safe", "0",  # 允许绝对路径
+            "-i", concat_file_abs,
+            "-c", "copy",  # 直接复制流，不重新编码（极快）
+            "-y",  # 覆盖输出文件
+            combined_video_path
+        ]
+        
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=300,  # 5分钟超时
+            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
+        )
+        
+        if result.returncode == 0 and os.path.exists(combined_video_path):
+            logger.info("✅ FFmpeg concat合并成功")
+            # 清理临时文件
+            try:
+                if os.path.exists(concat_file):
+                    os.remove(concat_file)
+                clip_files = [clip.file_path for clip in processed_clips]
+                delete_files(clip_files)
+            except:
+                pass
+            logger.info("video combining completed")
+            return combined_video_path
+        else:
+            error_msg = result.stderr[:500] if result.stderr else "unknown error"
+            logger.warning(f"⚠️ FFmpeg concat合并失败: {error_msg}")
+            logger.info("🔄 回退到MoviePy方式...")
+            # 回退到MoviePy方式
+    except Exception as e:
+        logger.warning(f"⚠️ FFmpeg concat合并异常: {str(e)}")
+        logger.info("🔄 回退到MoviePy方式...")
+    
+    # 回退方案：使用MoviePy逐个合并（原方式）
     # create initial video file as base
     base_clip_path = processed_clips[0].file_path
     temp_merged_video = f"{output_dir}/temp-merged-video.mp4"
@@ -795,6 +858,14 @@ def combine_videos(
     # clean temp files
     clip_files = [clip.file_path for clip in processed_clips]
     delete_files(clip_files)
+    
+    # 清理concat文件（如果存在）
+    try:
+        concat_file = os.path.join(output_dir, "concat_list.txt")
+        if os.path.exists(concat_file):
+            os.remove(concat_file)
+    except:
+        pass
             
     logger.info("video combining completed")
     return combined_video_path
