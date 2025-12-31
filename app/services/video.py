@@ -1001,6 +1001,46 @@ def get_ass_alignment_and_margin(position: str, custom_position: float, video_he
     return alignment, margin_v
 
 
+def get_font_internal_name(font_path: str) -> str:
+    """
+    使用PIL获取字体的真实内部名称
+    返回: 字体族名称，如果失败则返回默认值
+    """
+    try:
+        if not os.path.exists(font_path):
+            logger.warning(f"字体文件不存在: {font_path}")
+            return "Arial"
+        
+        # 使用PIL加载字体并获取真实名称
+        font = ImageFont.truetype(font_path, 10)  # 使用小尺寸加载，仅用于获取名称
+        # getname()返回(family, style)元组
+        font_family, font_style = font.getname()
+        logger.debug(f"字体真实名称: {font_family} (样式: {font_style})")
+        return font_family
+    except Exception as e:
+        logger.warning(f"无法获取字体内部名称 {font_path}: {str(e)}")
+        # 回退到文件名映射
+        font_basename = os.path.basename(font_path).lower()
+        font_mapping = {
+            "microsoftyaheibold.ttc": "Microsoft YaHei",
+            "microsoftyaheinormal.ttc": "Microsoft YaHei",
+            "stheitimedium.ttc": "STHeiti",
+            "stheitilight.ttc": "STHeiti",
+            "charm-bold.ttf": "Charm",
+            "charm-regular.ttf": "Charm",
+        }
+        font_name = font_mapping.get(font_basename)
+        if not font_name:
+            # 从文件名提取
+            font_name = os.path.splitext(font_basename)[0]
+            for suffix in ["bold", "regular", "medium", "light", "normal"]:
+                if font_name.endswith(suffix):
+                    font_name = font_name[:-len(suffix)].strip()
+            font_name = re.sub(r'([a-z])([A-Z])', r'\1 \2', font_name)
+            font_name = font_name.title()
+        return font_name or "Arial"
+
+
 def srt_to_ass(srt_path: str, ass_path: str, params: VideoParams, video_width: int, video_height: int) -> bool:
     """
     将SRT字幕文件转换为ASS格式，应用所有样式参数
@@ -1023,6 +1063,15 @@ def srt_to_ass(srt_path: str, ass_path: str, params: VideoParams, video_width: i
             font_path = os.path.join(utils.font_dir(), params.font_name)
             if os.name == "nt":
                 font_path = font_path.replace("\\", "/")
+            
+            # 验证字体文件是否存在
+            if not os.path.exists(font_path):
+                logger.error(f"❌ 字体文件不存在: {font_path}")
+                return False
+        
+        # 使用PIL获取字体的真实内部名称
+        font_name = get_font_internal_name(font_path) if font_path else "Arial"
+        logger.info(f"📝 使用字体: {font_name} (文件: {os.path.basename(font_path) if font_path else 'N/A'})")
         
         # 转换颜色
         primary_color = hex_to_ass_color(params.text_fore_color or "#FFFFFF")
@@ -1031,15 +1080,23 @@ def srt_to_ass(srt_path: str, ass_path: str, params: VideoParams, video_width: i
         # 字体大小和描边宽度
         # 根据视频分辨率缩放字体大小（默认60是针对1080p的）
         base_font_size = int(params.font_size or 60)
+        logger.debug(f"字体大小计算: 基础大小={base_font_size}, 视频高度={video_height}")
+        
         # 如果视频高度不是1920（标准竖屏1080p），按比例缩放字体
         if video_height != 1920:
             # 计算缩放比例（基于高度）
             scale_factor = video_height / 1920.0
             font_size = int(base_font_size * scale_factor)
-            # 确保最小字体大小
-            font_size = max(20, min(font_size, 200))
+            # 确保最小字体大小：基于视频高度的5%（至少40像素）
+            # 对于1248高度的视频，最小字体约为62像素
+            min_font_size = max(40, int(video_height * 0.05))
+            font_size = max(min_font_size, min(font_size, 200))
+            logger.debug(f"字体大小缩放: 缩放比例={scale_factor:.2f}, 计算后={int(base_font_size * scale_factor)}, 最小值={min_font_size}, 最终={font_size}")
         else:
             font_size = base_font_size
+            # 即使对于1920高度的视频，也确保最小字体大小
+            font_size = max(40, font_size)
+            logger.debug(f"字体大小: 最终={font_size}")
         
         # 描边宽度也需要按比例缩放
         base_outline_width = float(params.stroke_width or 1.5)
@@ -1060,56 +1117,49 @@ def srt_to_ass(srt_path: str, ass_path: str, params: VideoParams, video_width: i
         # 生成ASS文件
         ass_lines = []
         
-        # ASS文件头
+        # ASS文件头 - 关键：必须设置PlayResX和PlayResY，否则字幕坐标会错误
         ass_lines.append("[Script Info]")
         ass_lines.append("Title: MoneyPrinterTurbo Subtitle")
         ass_lines.append("ScriptType: v4.00+")
+        ass_lines.append(f"PlayResX: {video_width}")  # 设置播放分辨率宽度
+        ass_lines.append(f"PlayResY: {video_height}")  # 设置播放分辨率高度
         ass_lines.append("")
         ass_lines.append("[V4+ Styles]")
         ass_lines.append("Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding")
         
         # 样式定义
         style_name = "Default"
-        # FFmpeg的ass滤镜需要字体族名称
-        # 对于常见字体，尝试映射到标准字体名称
-        if font_path:
-            font_basename = os.path.basename(font_path).lower()
-            # 常见字体名称映射
-            font_mapping = {
-                "microsoftyaheibold.ttc": "Microsoft YaHei",
-                "microsoftyaheinormal.ttc": "Microsoft YaHei",
-                "stheitimedium.ttc": "STHeiti",
-                "stheitilight.ttc": "STHeiti",
-                "charm-bold.ttf": "Charm",
-                "charm-regular.ttf": "Charm",
-            }
-            # 尝试从映射中获取标准字体名称
-            font_name = font_mapping.get(font_basename)
-            if not font_name:
-                # 如果没有映射，尝试从文件名提取（移除扩展名和常见后缀）
-                font_name = os.path.splitext(font_basename)[0]
-                # 移除常见后缀（Bold, Regular, Medium等）
-                for suffix in ["bold", "regular", "medium", "light", "normal"]:
-                    if font_name.endswith(suffix):
-                        font_name = font_name[:-len(suffix)].strip()
-                # 将驼峰命名转换为空格分隔（如 MicrosoftYaHei -> Microsoft YaHei）
-                # re模块已在文件顶部导入，直接使用即可
-                font_name = re.sub(r'([a-z])([A-Z])', r'\1 \2', font_name)
-                font_name = font_name.title()  # 首字母大写
-        else:
-            font_name = "Arial"
-        # ASS格式: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, 
-        # Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, 
-        # Alignment, MarginL, MarginR, MarginV, Encoding
+        # ASS格式参数顺序（共23个参数）:
+        # 1. Name, 2. Fontname, 3. Fontsize, 4. PrimaryColour, 5. SecondaryColour, 6. OutlineColour, 7. BackColour,
+        # 8. Bold, 9. Italic, 10. Underline, 11. StrikeOut, 12. ScaleX, 13. ScaleY, 14. Spacing, 15. Angle,
+        # 16. BorderStyle, 17. Outline, 18. Shadow, 19. Alignment, 20. MarginL, 21. MarginR, 22. MarginV, 23. Encoding
         # SecondaryColour和BackColour也使用十六进制格式
         secondary_color = "&HFFFFFF&"  # 默认白色
         back_color = "&H000000&"  # 默认黑色背景（通常设为0表示透明）
-        ass_lines.append(f"Style: {style_name},{font_name},{font_size},{primary_color},{secondary_color},{outline_color},{back_color},0,0,0,0,0,100,100,0,0,1,{outline_width},0,{alignment},10,10,{margin_v},1")
+        
+        # 修复：确保参数顺序正确，ScaleX和ScaleY必须是100（不是0）
+        # Bold=0, Italic=0, Underline=0, StrikeOut=0, ScaleX=100, ScaleY=100, Spacing=0, Angle=0
+        # BorderStyle=1, Outline={outline_width}, Shadow=0, Alignment={alignment}
+        style_line = f"Style: {style_name},{font_name},{font_size},{primary_color},{secondary_color},{outline_color},{back_color},0,0,0,0,100,100,0,0,1,{outline_width},0,{alignment},10,10,{margin_v},1"
+        ass_lines.append(style_line)
+        
+        # 验证Style行参数（用于调试）
+        style_params = style_line.split(":")[1].split(",")
+        if len(style_params) >= 23:
+            logger.debug(f"Style行验证: ScaleX={style_params[11]}, ScaleY={style_params[12]}, Alignment={style_params[18]}, FontSize={style_params[2]}")
+            # 检查关键参数
+            if style_params[11] != "100" or style_params[12] != "100":
+                logger.error(f"❌ Style行错误: ScaleX={style_params[11]}, ScaleY={style_params[12]} (应该是100)")
+            if style_params[18] == "0":
+                logger.error(f"❌ Style行错误: Alignment={style_params[18]} (不能为0)")
+        else:
+            logger.warning(f"⚠️ Style行参数数量不正确: {len(style_params)} (应该是23)")
         ass_lines.append("")
         ass_lines.append("[Events]")
         ass_lines.append("Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text")
         
         # 转换字幕事件
+        dialogue_count = 0
         for idx, (index, time_line, text) in enumerate(subtitle_items):
             # 解析时间
             time_match = re.match(r"(\d{2}:\d{2}:\d{2},\d{3})\s*-->\s*(\d{2}:\d{2}:\d{2},\d{3})", time_line)
@@ -1121,6 +1171,9 @@ def srt_to_ass(srt_path: str, ass_path: str, params: VideoParams, video_width: i
             
             # 清理文本（移除HTML标签等）
             text = text.strip()
+            if not text:
+                continue
+            
             # 先处理换行，再转义其他字符
             text = text.replace("\r\n", "\n").replace("\r", "\n")  # 统一换行符
             # 转义ASS特殊字符（顺序很重要）
@@ -1131,13 +1184,29 @@ def srt_to_ass(srt_path: str, ass_path: str, params: VideoParams, video_width: i
             
             # 字幕事件格式: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             ass_lines.append(f"Dialogue: 0,{start_time},{end_time},{style_name},,0,0,0,,{text}")
+            dialogue_count += 1
+        
+        if dialogue_count == 0:
+            logger.warning("⚠️ 没有有效的字幕事件，ASS文件可能为空")
+            return False
         
         # 写入ASS文件（使用绝对路径）
         ass_path_abs = os.path.abspath(ass_path)
         with open(ass_path_abs, "w", encoding="utf-8-sig") as f:  # UTF-8 with BOM for Windows compatibility
             f.write("\n".join(ass_lines))
         
+        # 输出关键信息用于调试
         logger.info(f"✅ SRT转换为ASS成功: {ass_path_abs}")
+        logger.info(f"   - 分辨率: {video_width}x{video_height}")
+        logger.info(f"   - 字体: {font_name} (大小: {font_size}, 描边: {outline_width})")
+        logger.info(f"   - 位置: alignment={alignment}, margin_v={margin_v}")
+        logger.info(f"   - 字幕事件数: {dialogue_count}")
+        
+        # 验证ASS文件内容（输出前几行用于调试）
+        if logger._core.min_level <= 10:  # DEBUG级别
+            preview_lines = "\n".join(ass_lines[:15])  # 前15行
+            logger.debug(f"ASS文件预览:\n{preview_lines}")
+        
         return True
         
     except Exception as e:
@@ -1378,7 +1447,22 @@ def generate_video(
                 output_file_abs  # 使用系统绝对路径，subprocess会自动处理
             ]
             
-            logger.debug(f"FFmpeg命令: {' '.join(cmd)}")
+            # 输出详细的命令信息用于调试
+            logger.info(f"🎬 FFmpeg字幕命令:")
+            logger.info(f"   - ASS文件: {ass_path_abs}")
+            logger.info(f"   - 字体目录: {font_dir_abs}")
+            logger.info(f"   - 视频滤镜: {video_filter}")
+            logger.debug(f"完整命令: {' '.join(cmd)}")
+            
+            # 验证ASS文件是否存在
+            if not os.path.exists(ass_path_abs):
+                logger.error(f"❌ ASS文件不存在: {ass_path_abs}")
+                raise FileNotFoundError(f"ASS文件不存在: {ass_path_abs}")
+            
+            # 验证字体目录是否存在
+            if not os.path.exists(font_dir_abs):
+                logger.error(f"❌ 字体目录不存在: {font_dir_abs}")
+                raise FileNotFoundError(f"字体目录不存在: {font_dir_abs}")
             
             result = subprocess.run(
                 cmd,
@@ -1407,11 +1491,16 @@ def generate_video(
                 if error_msg:
                     # 尝试提取关键错误信息（跳过版本信息等）
                     error_lines = error_msg.split('\n')
-                    key_errors = [line for line in error_lines if any(keyword in line.lower() for keyword in ['error', 'failed', 'cannot', 'invalid', 'unable', 'no such'])]
+                    key_errors = [line for line in error_lines if any(keyword in line.lower() for keyword in ['error', 'failed', 'cannot', 'invalid', 'unable', 'no such', 'font', 'ass', 'could not'])]
                     if key_errors:
-                        logger.error(f"FFmpeg关键错误: {'; '.join(key_errors[:5])}")
+                        logger.error(f"FFmpeg关键错误:")
+                        for err in key_errors[:10]:  # 显示前10个关键错误
+                            logger.error(f"   - {err}")
                     else:
                         logger.debug(f"FFmpeg完整输出: {error_msg[:2000]}")
+                
+                # 如果失败，保留ASS文件用于调试
+                logger.warning(f"⚠️ ASS文件已保留用于调试: {ass_path_abs}")
                 logger.info("🔄 回退到MoviePy方式...")
                 # 回退：重新加载视频并使用MoviePy方式
                 video_clip = VideoFileClip(temp_video_no_sub).without_audio()
