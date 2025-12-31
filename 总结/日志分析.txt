@@ -1,0 +1,319 @@
+2025-12-31 09:40:12.307 | INFO     | app.config.config:<module>:78 - MoneyPrinterTurbo v1.2.6
+2025-12-31 10:09:22 | INFO | "./app\services\llm.py:358": generate_script - subject: 带鱼溯源解说
+2025-12-31 10:09:22 | INFO | "./app\services\llm.py:21": _generate_response - llm provider: qwen
+2025-12-31 10:09:29 | SUCCESS | "./app\services\llm.py:401": generate_script - completed:
+带鱼是一种生活在海洋中的鱼类，它们的身体细长，呈银白色，常见于太平洋和大西洋的深海区域。带鱼不仅肉质鲜美，而且营养价值高，含有丰富的
+蛋白质、维生素和矿物质。在捕捞过程中，渔民们通常会使用专门的渔网，在夜间进行作业，因为带鱼有趋光性，更容易聚集在一起。从海洋到餐桌，
+每一条带鱼都经历了严格的筛选与处理，确保了食材的新鲜与安全。无论是清蒸还是红烧，带鱼都是餐桌上不可或缺的一道美味佳肴。
+2025-12-31 10:09:29 | INFO | "./app\services\llm.py:432": generate_terms - subject: 带鱼溯源解说
+2025-12-31 10:09:29 | INFO | "./app\services\llm.py:21": _generate_response - llm provider: qwen
+2025-12-31 10:09:33 | SUCCESS | "./app\services\llm.py:465": generate_terms - completed:
+['cutlassfish origin', 'deep sea cutlassfish', 'cutlassfish fishing', 'cutlassfish nutrition', 'cutlassfish preparation']
+2025-12-31 10:12:53 | INFO | "./app\services\llm.py:432": generate_terms - subject: 带鱼溯源解说
+2025-12-31 10:12:53 | INFO | "./app\services\llm.py:21": _generate_response - llm provider: qwen
+2025-12-31 10:12:56 | SUCCESS | "./app\services\llm.py:465": generate_terms - completed:
+['ribbon fish origin', 'fresh ribbon fish', 'river ribbon fish', 'fish and shrimp play', 'farmer catches ribbon fish']
+2025-12-31 10:14:00 | INFO | "./webui\Main.py:1042": <module> - 开始生成视频
+2025-12-31 10:14:00 | INFO | "./webui\Main.py:1043": <module> - {
+    "video_subject": "带鱼溯源解说",
+    "video_script": "咸阳的黄土高原下，河流里银鳞带鱼正和虾群追逐嬉戏。\n老农从浅滩捧起活蹦乱跳的带鱼，转眼就送到了女工灵巧的手中。\n
+泡沫箱刚封好冰鲜，货车已经带着这份鲜美驶向远方。",
+    "video_terms": "ribbon fish origin, fresh ribbon fish, river ribbon fish, fish and shrimp play, farmer catches ribbon fish",
+    "video_aspect": "9:16",
+    "video_concat_mode": "random",
+    "video_transition_mode": "None",
+    "video_clip_duration": 3,
+    "video_count": 1,
+    "video_source": "local",
+    "video_materials": [
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\069032ba-1aa8-4e49-9500-c574c902637a_vid
+eo_AA_剧情故事-产品溯源-{舟山带鱼}-01-A-{镜头缓缓向前推进}.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\c8eaf7ba-b131-4f8f-b76a-8f711b94cca6_vid
+eo_AA_剧情故事-产品溯源-{舟山带鱼}-02-A-{镜头缓缓平移}.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\c96d2f27-fc39-4341-8bf5-cc52eb975ea5_vid
+eo_AA_剧情故事-产品溯源-{舟山带鱼}-03-A-{}.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\76f5ee8b-10b9-49d7-85d6-c08205021a63_vid
+eo_AA_剧情故事-产品溯源-{舟山带鱼}-04-A-{镜头平移聚焦农民动作  }.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\e871c830-a00a-4fcf-87e2-58f65bc5f593_vid
+eo_AA_剧情故事-产品溯源-{舟山带鱼}-05-A-{}.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\b62a0373-ef92-429c-8e23-57418de0b17f_vid
+eo_AA_剧情故事-产品溯源-{舟山带鱼}-06-A-{}.png_1.mp4",
+            "duration": 0
+        },
+        {
+            "provider": "local",
+            "url": "D:\\code4\\51_computer\\maven\\MoneyPrinterTurbo\\storage\\local_videos\\252810c8-2c15-498b-996d-202baabf5aba_vid
+eo_AA_剧情故事-产品溯源-{舟山带鱼}-07-A-{镜头缓缓升高}.png_1.mp4",
+            "duration": 0
+        }
+    ],
+    "custom_audio_file": null,
+    "video_language": "",
+    "voice_name": "zh-CN-XiaoxiaoNeural-Female",
+    "voice_volume": 1.0,
+    "voice_rate": 1.0,
+    "bgm_type": "random",
+    "bgm_file": "",
+    "bgm_volume": 0.2,
+    "subtitle_enabled": true,
+    "subtitle_position": "bottom",
+    "custom_position": 70.0,
+    "font_name": "MicrosoftYaHeiBold.ttc",
+    "text_fore_color": "#FFFFFF",
+    "text_background_color": true,
+    "font_size": 60,
+    "stroke_color": "#000000",
+    "stroke_width": 1.5,
+    "n_threads": 2,
+    "paragraph_number": 1
+}
+2025-12-31 10:14:00 | INFO | "./app\services\task.py:247": start - start task: fc03e457-fc95-4abb-92b1-06acfe294354, stop_at: video
+2025-12-31 10:14:00 | INFO | "./app\services\task.py:17": generate_script -
+
+## generating video script
+2025-12-31 10:14:00 | DEBUG | "./app\services\task.py:26": generate_script - video script:
+咸阳的黄土高原下，河流里银鳞带鱼正和虾群追逐嬉戏。
+老农从浅滩捧起活蹦乱跳的带鱼，转眼就送到了女工灵巧的手中。
+泡沫箱刚封好冰鲜，货车已经带着这份鲜美驶向远方。
+2025-12-31 10:14:00 | INFO | "./app\services\task.py:84": generate_audio -
+
+## generating audio
+2025-12-31 10:14:00 | INFO | "./app\services\task.py:92": generate_audio - no custom audio file provided, using TTS to generate audio
+.
+2025-12-31 10:14:00 | INFO | "./app\services\voice.py:1178": azure_tts_v1 - start, voice name: zh-CN-XiaoxiaoNeural, try: 1
+2025-12-31 10:14:02 | INFO | "./app\services\voice.py:1198": azure_tts_v1 - completed, output file: .\storage\tasks\fc03e457-fc95-4ab
+b-92b1-06acfe294354\audio.mp3
+2025-12-31 10:14:02 | INFO | "./app\services\task.py:132": generate_subtitle -
+
+## generating subtitle
+2025-12-31 10:14:02 | INFO | "./app\services\task.py:138": generate_subtitle -
+
+## generating subtitle, provider: edge
+2025-12-31 10:14:02 | INFO | "./app\services\voice.py:1649": create_subtitle - completed, subtitle file created: .\storage\tasks\fc03
+e457-fc95-4abb-92b1-06acfe294354\subtitle.srt, duration: 16.975
+2025-12-31 10:14:02 | INFO | "./app\services\task.py:164": get_video_materials -
+
+## preprocess local materials
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso
+2avc1mp41', 'LvMetaInfo': '{"data":{"os":"","product":"dreamina","exportType":"generation","videoId":"0"}}', 'UserComment': '{"aigc_l
+abel_type":0,"source_info":"dreamina"}', 'comment': 'vid:v02870g10004d4ug7jfog65nvajhkl7g', 'encoder': 'Lavf58.76.100'}, 'inputs': [{
+'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language': None, 'default': True, 'size': [704, 1248], '
+bitrate': 6789, 'fps': 24.12, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler',
+ 'vendor_id': '[0][0][0][0]'}}], 'input_number': 0}], 'duration': 5.02, 'bitrate': 6795, 'start': 0.0, 'default_video_input_number':
+0, 'default_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [704, 1248], 'video_bitrate
+': 6789, 'video_fps': 24.12, 'video_duration': 5.02, 'video_n_frames': 121}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_
+computer\maven\MoneyPrinterTurbo\storage\local_videos\069032ba-1aa8-4e49-9500-c574c902637a_video_AA_剧情故事-产品溯源-{舟山带鱼}-01-A
+-{镜头缓缓向前推进}.png_1.mp4 -loglevel error -f image2pipe -vf scale=704:1248 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso
+2avc1mp41', 'LvMetaInfo': '{"data":{"os":"","product":"dreamina","exportType":"generation","videoId":"0"}}', 'UserComment': '{"aigc_l
+abel_type":0,"source_info":"dreamina"}', 'comment': 'vid:v02870g10004d4ug7mfog65p8d91quqg', 'encoder': 'Lavf58.76.100'}, 'inputs': [{
+'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language': None, 'default': True, 'size': [704, 1248], '
+bitrate': 6965, 'fps': 24.12, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler',
+ 'vendor_id': '[0][0][0][0]'}}], 'input_number': 0}], 'duration': 5.02, 'bitrate': 6969, 'start': 0.0, 'default_video_input_number':
+0, 'default_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [704, 1248], 'video_bitrate
+': 6965, 'video_fps': 24.12, 'video_duration': 5.02, 'video_n_frames': 121}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_
+computer\maven\MoneyPrinterTurbo\storage\local_videos\c8eaf7ba-b131-4f8f-b76a-8f711b94cca6_video_AA_剧情故事-产品溯源-{舟山带鱼}-02-A
+-{镜头缓缓平移}.png_1.mp4 -loglevel error -f image2pipe -vf scale=704:1248 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso
+2avc1mp41', 'LvMetaInfo': '{"data":{"os":"","product":"dreamina","exportType":"generation","videoId":"0"}}', 'UserComment': '{"aigc_l
+abel_type":0,"source_info":"dreamina"}', 'comment': 'vid:v02870g10004d4ug7pfog65pkfte8l80', 'encoder': 'Lavf58.76.100'}, 'inputs': [{
+'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language': None, 'default': True, 'size': [704, 1248], '
+bitrate': 6991, 'fps': 24.12, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler',
+ 'vendor_id': '[0][0][0][0]'}}], 'input_number': 0}], 'duration': 5.02, 'bitrate': 6996, 'start': 0.0, 'default_video_input_number':
+0, 'default_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [704, 1248], 'video_bitrate
+': 6991, 'video_fps': 24.12, 'video_duration': 5.02, 'video_n_frames': 121}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_
+computer\maven\MoneyPrinterTurbo\storage\local_videos\c96d2f27-fc39-4341-8bf5-cc52eb975ea5_video_AA_剧情故事-产品溯源-{舟山带鱼}-03-A
+-{}.png_1.mp4 -loglevel error -f image2pipe -vf scale=704:1248 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso
+2avc1mp41', 'LvMetaInfo': '{"data":{"os":"","product":"dreamina","exportType":"generation","videoId":"0"}}', 'UserComment': '{"aigc_l
+abel_type":0,"source_info":"dreamina"}', 'comment': 'vid:v02870g10004d4ug7t7og65lmrj99am0', 'encoder': 'Lavf58.76.100'}, 'inputs': [{
+'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language': None, 'default': True, 'size': [704, 1248], '
+bitrate': 6983, 'fps': 24.12, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler',
+ 'vendor_id': '[0][0][0][0]'}}], 'input_number': 0}], 'duration': 5.02, 'bitrate': 6987, 'start': 0.0, 'default_video_input_number':
+0, 'default_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [704, 1248], 'video_bitrate
+': 6983, 'video_fps': 24.12, 'video_duration': 5.02, 'video_n_frames': 121}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_
+computer\maven\MoneyPrinterTurbo\storage\local_videos\76f5ee8b-10b9-49d7-85d6-c08205021a63_video_AA_剧情故事-产品溯源-{舟山带鱼}-04-A
+-{镜头平移聚焦农民动作  }.png_1.mp4 -loglevel error -f image2pipe -vf scale=704:1248 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvid
+eo -
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso
+2avc1mp41', 'LvMetaInfo': '{"data":{"os":"","product":"dreamina","exportType":"generation","videoId":"0"}}', 'UserComment': '{"aigc_l
+abel_type":0,"source_info":"dreamina"}', 'comment': 'vid:v02870g10004d4ug807og65r2q4u2bh0', 'encoder': 'Lavf58.76.100'}, 'inputs': [{
+'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language': None, 'default': True, 'size': [704, 1248], '
+bitrate': 6903, 'fps': 24.12, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler',
+ 'vendor_id': '[0][0][0][0]'}}], 'input_number': 0}], 'duration': 5.02, 'bitrate': 6909, 'start': 0.0, 'default_video_input_number':
+0, 'default_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [704, 1248], 'video_bitrate
+': 6903, 'video_fps': 24.12, 'video_duration': 5.02, 'video_n_frames': 121}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_
+computer\maven\MoneyPrinterTurbo\storage\local_videos\e871c830-a00a-4fcf-87e2-58f65bc5f593_video_AA_剧情故事-产品溯源-{舟山带鱼}-05-A
+-{}.png_1.mp4 -loglevel error -f image2pipe -vf scale=704:1248 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso
+2avc1mp41', 'LvMetaInfo': '{"data":{"os":"","product":"dreamina","exportType":"generation","videoId":"0"}}', 'UserComment': '{"aigc_l
+abel_type":0,"source_info":"dreamina"}', 'comment': 'vid:v02870g10004d4ug80vog65uf8f2unp0', 'encoder': 'Lavf58.76.100'}, 'inputs': [{
+'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language': None, 'default': True, 'size': [704, 1248], '
+bitrate': 6961, 'fps': 24.12, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler',
+ 'vendor_id': '[0][0][0][0]'}}], 'input_number': 0}], 'duration': 5.02, 'bitrate': 6967, 'start': 0.0, 'default_video_input_number':
+0, 'default_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [704, 1248], 'video_bitrate
+': 6961, 'video_fps': 24.12, 'video_duration': 5.02, 'video_n_frames': 121}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_
+computer\maven\MoneyPrinterTurbo\storage\local_videos\b62a0373-ef92-429c-8e23-57418de0b17f_video_AA_剧情故事-产品溯源-{舟山带鱼}-06-A
+-{}.png_1.mp4 -loglevel error -f image2pipe -vf scale=704:1248 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso
+2avc1mp41', 'LvMetaInfo': '{"data":{"os":"","product":"dreamina","exportType":"generation","videoId":"0"}}', 'UserComment': '{"aigc_l
+abel_type":0,"source_info":"dreamina"}', 'comment': 'vid:v02870g10004d4ug83vog65nkgibrggg', 'encoder': 'Lavf58.76.100'}, 'inputs': [{
+'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language': None, 'default': True, 'size': [704, 1248], '
+bitrate': 6881, 'fps': 24.12, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler',
+ 'vendor_id': '[0][0][0][0]'}}], 'input_number': 0}], 'duration': 5.02, 'bitrate': 6887, 'start': 0.0, 'default_video_input_number':
+0, 'default_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [704, 1248], 'video_bitrate
+': 6881, 'video_fps': 24.12, 'video_duration': 5.02, 'video_n_frames': 121}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_
+computer\maven\MoneyPrinterTurbo\storage\local_videos\252810c8-2c15-498b-996d-202baabf5aba_video_AA_剧情故事-产品溯源-{舟山带鱼}-07-A
+-{镜头缓缓升高}.png_1.mp4 -loglevel error -f image2pipe -vf scale=704:1248 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+2025-12-31 10:14:03 | INFO | "./app\services\task.py:211": generate_final_videos -
+
+## combining video: 1 => .\storage\tasks\fc03e457-fc95-4abb-92b1-06acfe294354\combined-1.mp4
+2025-12-31 10:14:03 | INFO | "./app\services\video.py:129": combine_videos - audio duration: 17.54 seconds
+2025-12-31 10:14:03 | INFO | "./app\services\video.py:133": combine_videos - maximum clip duration: 3 seconds
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso
+2avc1mp41', 'LvMetaInfo': '{"data":{"os":"","product":"dreamina","exportType":"generation","videoId":"0"}}', 'UserComment': '{"aigc_l
+abel_type":0,"source_info":"dreamina"}', 'comment': 'vid:v02870g10004d4ug7jfog65nvajhkl7g', 'encoder': 'Lavf58.76.100'}, 'inputs': [{
+'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language': None, 'default': True, 'size': [704, 1248], '
+bitrate': 6789, 'fps': 24.12, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler',
+ 'vendor_id': '[0][0][0][0]'}}], 'input_number': 0}], 'duration': 5.02, 'bitrate': 6795, 'start': 0.0, 'default_video_input_number':
+0, 'default_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [704, 1248], 'video_bitrate
+': 6789, 'video_fps': 24.12, 'video_duration': 5.02, 'video_n_frames': 121}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_
+computer\maven\MoneyPrinterTurbo\storage\local_videos\069032ba-1aa8-4e49-9500-c574c902637a_video_AA_剧情故事-产品溯源-{舟山带鱼}-01-A
+-{镜头缓缓向前推进}.png_1.mp4 -loglevel error -f image2pipe -vf scale=704:1248 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso
+2avc1mp41', 'LvMetaInfo': '{"data":{"os":"","product":"dreamina","exportType":"generation","videoId":"0"}}', 'UserComment': '{"aigc_l
+abel_type":0,"source_info":"dreamina"}', 'comment': 'vid:v02870g10004d4ug7mfog65p8d91quqg', 'encoder': 'Lavf58.76.100'}, 'inputs': [{
+'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language': None, 'default': True, 'size': [704, 1248], '
+bitrate': 6965, 'fps': 24.12, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler',
+ 'vendor_id': '[0][0][0][0]'}}], 'input_number': 0}], 'duration': 5.02, 'bitrate': 6969, 'start': 0.0, 'default_video_input_number':
+0, 'default_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [704, 1248], 'video_bitrate
+': 6965, 'video_fps': 24.12, 'video_duration': 5.02, 'video_n_frames': 121}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_
+computer\maven\MoneyPrinterTurbo\storage\local_videos\c8eaf7ba-b131-4f8f-b76a-8f711b94cca6_video_AA_剧情故事-产品溯源-{舟山带鱼}-02-A
+-{镜头缓缓平移}.png_1.mp4 -loglevel error -f image2pipe -vf scale=704:1248 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso
+bitrate': 6881, 'fps': 24.12, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler', 'vendor_id': '[0][0][0][0]'}}], 'input_number': 0}], 'duration': 5.02, 'bitrate': 6887, 'start': 0.0, 'default_video_input_number': 0, 'd
+efault_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [704, 1248], 'video_bitrate': 6881, 'video_fps': 24.12, 'video_duration': 5.02, 'video_n_frames': 121}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_computer\maven\MoneyPrinterTurbo\storage\local_videos\252810c8-2c15-498b-996d-202baabf5aba_video_AA_剧情故事-产品溯源-{舟山带鱼}-07-A-{镜
+头缓缓升高}.png_1.mp4 -loglevel error -f image2pipe -vf scale=704:1248 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+2025-12-31 10:14:04 | DEBUG | "./app\services\video.py:162": combine_videos - total subclipped items: 7
+2025-12-31 10:14:04 | DEBUG | "./app\services\video.py:169": combine_videos - processing clip 1: 704x1248, current duration: 0.00s, remaining: 17.54s
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'LvMetaInfo': '{"data":{"os":"","product":"dreamina","exportType":"generation","videoId":"0"}}', 'UserComment': '{"aigc_label_
+type":0,"source_info":"dreamina"}', 'comment': 'vid:v02870g10004d4ug7jfog65nvajhkl7g', 'encoder': 'Lavf58.76.100'}, 'inputs': [{'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language': None, 'default': True, 'size': [704, 1248], 'bitrate':
+6789, 'fps': 24.12, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler', 'vendor_id': '[0][0][0][0]'}}], 'input_number': 0}], 'duration': 5.02, 'bitrate': 6795, 'start': 0.0, 'default_video_input_number': 0, 'default_vid
+eo_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [704, 1248], 'video_bitrate': 6789, 'video_fps': 24.12, 'video_duration': 5.02, 'video_n_frames': 121}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_computer\maven\MoneyPrinterTurbo\storage\local_videos\069032ba-1aa8-4e49-9500-c574c902637a_video_AA_剧情故事-产品溯源-{舟山带鱼}-01-A-{镜
+头缓缓向前推进}.png_1.mp4 -loglevel error -f image2pipe -vf scale=704:1248 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+2025-12-31 10:14:04 | DEBUG | "./app\services\video.py:179": combine_videos - resizing clip, source: 704x1248, ratio: 0.56, target: 1080x1920, ratio: 0.56
+2025-12-31 10:14:21 | DEBUG | "./app\services\video.py:169": combine_videos - processing clip 2: 704x1248, current duration: 3.00s, remaining: 14.54s
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'LvMetaInfo': '{"data":{"os":"","product":"dreamina","exportType":"generation","videoId":"0"}}', 'UserComment': '{"aigc_label_
+type":0,"source_info":"dreamina"}', 'comment': 'vid:v02870g10004d4ug7pfog65pkfte8l80', 'encoder': 'Lavf58.76.100'}, 'inputs': [{'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language': None, 'default': True, 'size': [704, 1248], 'bitrate':
+6991, 'fps': 24.12, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler', 'vendor_id': '[0][0][0][0]'}}], 'input_number': 0}], 'duration': 5.02, 'bitrate': 6996, 'start': 0.0, 'default_video_input_number': 0, 'default_vid
+eo_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [704, 1248], 'video_bitrate': 6991, 'video_fps': 24.12, 'video_duration': 5.02, 'video_n_frames': 121}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_computer\maven\MoneyPrinterTurbo\storage\local_videos\c96d2f27-fc39-4341-8bf5-cc52eb975ea5_video_AA_剧情故事-产品溯源-{舟山带鱼}-03-A-{}.p
+ng_1.mp4 -loglevel error -f image2pipe -vf scale=704:1248 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+2025-12-31 10:14:21 | DEBUG | "./app\services\video.py:179": combine_videos - resizing clip, source: 704x1248, ratio: 0.56, target: 1080x1920, ratio: 0.56
+2025-12-31 10:14:38 | DEBUG | "./app\services\video.py:169": combine_videos - processing clip 3: 704x1248, current duration: 6.00s, remaining: 11.54s
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'LvMetaInfo': '{"data":{"os":"","product":"dreamina","exportType":"generation","videoId":"0"}}', 'UserComment': '{"aigc_label_
+type":0,"source_info":"dreamina"}', 'comment': 'vid:v02870g10004d4ug807og65r2q4u2bh0', 'encoder': 'Lavf58.76.100'}, 'inputs': [{'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language': None, 'default': True, 'size': [704, 1248], 'bitrate':
+6903, 'fps': 24.12, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler', 'vendor_id': '[0][0][0][0]'}}], 'input_number': 0}], 'duration': 5.02, 'bitrate': 6909, 'start': 0.0, 'default_video_input_number': 0, 'default_vid
+eo_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [704, 1248], 'video_bitrate': 6903, 'video_fps': 24.12, 'video_duration': 5.02, 'video_n_frames': 121}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_computer\maven\MoneyPrinterTurbo\storage\local_videos\e871c830-a00a-4fcf-87e2-58f65bc5f593_video_AA_剧情故事-产品溯源-{舟山带鱼}-05-A-{}.p
+ng_1.mp4 -loglevel error -f image2pipe -vf scale=704:1248 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+2025-12-31 10:14:39 | DEBUG | "./app\services\video.py:179": combine_videos - resizing clip, source: 704x1248, ratio: 0.56, target: 1080x1920, ratio: 0.56
+2025-12-31 10:14:55 | DEBUG | "./app\services\video.py:169": combine_videos - processing clip 4: 704x1248, current duration: 9.00s, remaining: 8.54s
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'LvMetaInfo': '{"data":{"os":"","product":"dreamina","exportType":"generation","videoId":"0"}}', 'UserComment': '{"aigc_label_
+type":0,"source_info":"dreamina"}', 'comment': 'vid:v02870g10004d4ug7t7og65lmrj99am0', 'encoder': 'Lavf58.76.100'}, 'inputs': [{'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language': None, 'default': True, 'size': [704, 1248], 'bitrate':
+6983, 'fps': 24.12, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler', 'vendor_id': '[0][0][0][0]'}}], 'input_number': 0}], 'duration': 5.02, 'bitrate': 6987, 'start': 0.0, 'default_video_input_number': 0, 'default_vid
+eo_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [704, 1248], 'video_bitrate': 6983, 'video_fps': 24.12, 'video_duration': 5.02, 'video_n_frames': 121}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_computer\maven\MoneyPrinterTurbo\storage\local_videos\76f5ee8b-10b9-49d7-85d6-c08205021a63_video_AA_剧情故事-产品溯源-{舟山带鱼}-04-A-{镜
+头平移聚焦农民动作  }.png_1.mp4 -loglevel error -f image2pipe -vf scale=704:1248 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+2025-12-31 10:14:56 | DEBUG | "./app\services\video.py:179": combine_videos - resizing clip, source: 704x1248, ratio: 0.56, target: 1080x1920, ratio: 0.56
+2025-12-31 10:15:12 | DEBUG | "./app\services\video.py:169": combine_videos - processing clip 5: 704x1248, current duration: 12.00s, remaining: 5.54s
+computer\maven\MoneyPrinterTurbo\storage\tasks\fc03e457-fc95-4abb-92b1-06acfe294354/temp-clip-3.mp4 -loglevel error -f image2pipe -vf scale=1080:1920 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+2025-12-31 10:16:00 | INFO | "./app\services\video.py:267": combine_videos - merging clip 3/5, duration: 3.00s
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'encoder': 'Lavf61.7.100'}, 'inputs': [{'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language'
+: None, 'default': True, 'size': [1080, 1920], 'bitrate': 2680, 'fps': 30.0, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler', 'vendor_id': '[0][0][0][0]', 'encoder': 'Lavc61.19.100 libx264'}}], 'input_number': 0}], '
+duration': 9.0, 'bitrate': 2684, 'start': 0.0, 'default_video_input_number': 0, 'default_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [1080, 1920], 'video_bitrate': 2680, 'video_fps': 30.0, 'video_duration': 9.0, 'video_n_
+frames': 270}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_computer\maven\MoneyPrinterTurbo\storage\tasks\fc03e457-fc95-4abb-92b1-06acfe294354/temp-merged-video.mp4 -loglevel error -f image2pipe -v
+f scale=1080:1920 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'encoder': 'Lavf61.7.100'}, 'inputs': [{'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language'
+: None, 'default': True, 'size': [1080, 1920], 'bitrate': 4498, 'fps': 30.0, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler', 'vendor_id': '[0][0][0][0]', 'encoder': 'Lavc61.19.100 libx264'}}], 'input_number': 0}], '
+duration': 3.0, 'bitrate': 4503, 'start': 0.0, 'default_video_input_number': 0, 'default_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [1080, 1920], 'video_bitrate': 4498, 'video_fps': 30.0, 'video_duration': 3.0, 'video_n_
+frames': 90}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_computer\maven\MoneyPrinterTurbo\storage\tasks\fc03e457-fc95-4abb-92b1-06acfe294354/temp-clip-4.mp4 -loglevel error -f image2pipe -vf scal
+e=1080:1920 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+2025-12-31 10:16:13 | INFO | "./app\services\video.py:267": combine_videos - merging clip 4/5, duration: 3.00s
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'encoder': 'Lavf61.7.100'}, 'inputs': [{'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language'
+: None, 'default': True, 'size': [1080, 1920], 'bitrate': 2933, 'fps': 30.0, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler', 'vendor_id': '[0][0][0][0]', 'encoder': 'Lavc61.19.100 libx264'}}], 'input_number': 0}], '
+duration': 12.0, 'bitrate': 2936, 'start': 0.0, 'default_video_input_number': 0, 'default_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [1080, 1920], 'video_bitrate': 2933, 'video_fps': 30.0, 'video_duration': 12.0, 'video_
+n_frames': 360}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_computer\maven\MoneyPrinterTurbo\storage\tasks\fc03e457-fc95-4abb-92b1-06acfe294354/temp-merged-video.mp4 -loglevel error -f image2pipe -v
+f scale=1080:1920 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'encoder': 'Lavf61.7.100'}, 'inputs': [{'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language'
+: None, 'default': True, 'size': [1080, 1920], 'bitrate': 2810, 'fps': 30.0, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler', 'vendor_id': '[0][0][0][0]', 'encoder': 'Lavc61.19.100 libx264'}}], 'input_number': 0}], '
+duration': 3.0, 'bitrate': 2815, 'start': 0.0, 'default_video_input_number': 0, 'default_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [1080, 1920], 'video_bitrate': 2810, 'video_fps': 30.0, 'video_duration': 3.0, 'video_n_
+frames': 90}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_computer\maven\MoneyPrinterTurbo\storage\tasks\fc03e457-fc95-4abb-92b1-06acfe294354/temp-clip-5.mp4 -loglevel error -f image2pipe -vf scal
+e=1080:1920 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+2025-12-31 10:16:28 | INFO | "./app\services\video.py:267": combine_videos - merging clip 5/5, duration: 3.00s
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'encoder': 'Lavf61.7.100'}, 'inputs': [{'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language'
+: None, 'default': True, 'size': [1080, 1920], 'bitrate': 2760, 'fps': 30.0, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler', 'vendor_id': '[0][0][0][0]', 'encoder': 'Lavc61.19.100 libx264'}}], 'input_number': 0}], '
+duration': 15.0, 'bitrate': 2763, 'start': 0.0, 'default_video_input_number': 0, 'default_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [1080, 1920], 'video_bitrate': 2760, 'video_fps': 30.0, 'video_duration': 15.0, 'video_
+n_frames': 450}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_computer\maven\MoneyPrinterTurbo\storage\tasks\fc03e457-fc95-4abb-92b1-06acfe294354/temp-merged-video.mp4 -loglevel error -f image2pipe -v
+f scale=1080:1920 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'encoder': 'Lavf61.7.100'}, 'inputs': [{'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language'
+: None, 'default': True, 'size': [1080, 1920], 'bitrate': 3192, 'fps': 30.0, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler', 'vendor_id': '[0][0][0][0]', 'encoder': 'Lavc61.19.100 libx264'}}], 'input_number': 0}], '
+duration': 3.0, 'bitrate': 3198, 'start': 0.0, 'default_video_input_number': 0, 'default_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [1080, 1920], 'video_bitrate': 3192, 'video_fps': 30.0, 'video_duration': 3.0, 'video_n_
+frames': 90}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_computer\maven\MoneyPrinterTurbo\storage\tasks\fc03e457-fc95-4abb-92b1-06acfe294354/temp-clip-6.mp4 -loglevel error -f image2pipe -vf scal
+e=1080:1920 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+2025-12-31 10:16:45 | INFO | "./app\services\video.py:305": combine_videos - video combining completed
+2025-12-31 10:16:45 | INFO | "./app\services\task.py:228": generate_final_videos -
+
+## generating video: 1 => .\storage\tasks\fc03e457-fc95-4abb-92b1-06acfe294354\final-1.mp4
+2025-12-31 10:16:45 | INFO | "./app\services\video.py:373": generate_video - generating video: 1080 x 1920
+2025-12-31 10:16:45 | INFO | "./app\services\video.py:374": generate_video -   ① video: .\storage\tasks\fc03e457-fc95-4abb-92b1-06acfe294354\combined-1.mp4
+2025-12-31 10:16:45 | INFO | "./app\services\video.py:375": generate_video -   ② audio: .\storage\tasks\fc03e457-fc95-4abb-92b1-06acfe294354\audio.mp3
+2025-12-31 10:16:45 | INFO | "./app\services\video.py:376": generate_video -   ③ subtitle: .\storage\tasks\fc03e457-fc95-4abb-92b1-06acfe294354\subtitle.srt
+2025-12-31 10:16:45 | INFO | "./app\services\video.py:377": generate_video -   ④ output: .\storage\tasks\fc03e457-fc95-4abb-92b1-06acfe294354\final-1.mp4
+2025-12-31 10:16:45 | INFO | "./app\services\video.py:392": generate_video -   ⑤ font: D:/code4/51_computer/maven/MoneyPrinterTurbo/resource/fonts/MicrosoftYaHeiBold.ttc
+{'video_found': True, 'audio_found': False, 'metadata': {'major_brand': 'isom', 'minor_version': '512', 'compatible_brands': 'isomiso2avc1mp41', 'encoder': 'Lavf61.7.100'}, 'inputs': [{'streams': [{'input_number': 0, 'stream_number': 0, 'stream_type': 'video', 'language'
+: None, 'default': True, 'size': [1080, 1920], 'bitrate': 2686, 'fps': 30.0, 'codec_name': 'h264', 'profile': '(High)', 'metadata': {'Metadata': '', 'handler_name': 'VideoHandler', 'vendor_id': '[0][0][0][0]', 'encoder': 'Lavc61.19.100 libx264'}}], 'input_number': 0}], '
+duration': 18.0, 'bitrate': 2689, 'start': 0.0, 'default_video_input_number': 0, 'default_video_stream_number': 0, 'video_codec_name': 'h264', 'video_profile': '(High)', 'video_size': [1080, 1920], 'video_bitrate': 2686, 'video_fps': 30.0, 'video_duration': 18.0, 'video_
+n_frames': 540}
+C:\ProgramData\miniconda3\envs\MoneyPrinterTurbo\Lib\site-packages\imageio_ffmpeg\binaries\ffmpeg-win-x86_64-v7.1.exe -i D:\code4\51_computer\maven\MoneyPrinterTurbo\storage\tasks\fc03e457-fc95-4abb-92b1-06acfe294354\combined-1.mp4 -loglevel error -f image2pipe -vf scale
+=1080:1920 -sws_flags bicubic -pix_fmt rgb24 -vcodec rawvideo -
+2025-12-31 10:17:46 | SUCCESS | "./app\services\task.py:348": start - task fc03e457-fc95-4abb-92b1-06acfe294354 finished, generated 1 videos.
